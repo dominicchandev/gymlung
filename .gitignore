@@ -1,0 +1,41 @@
+# Xcode user data
+xcuserdata/
+*.xcuserstate
+*.xcuserdatad/
+
+# Xcode build
+build/
+DerivedData/
+*.ipa
+*.dSYM.zip
+*.dSYM
+
+# Swift Package Manager
+.build/
+Packages/
+
+# CocoaPods (if used)
+Pods/
+
+# Secrets & API keys
+secret.txt
+food_db_api_key.txt
+Secrets.plist
+
+# MCP local config
+.mcp.json
+
+# Design assets (not source code)
+AppIconCandidates/
+
+# Supabase local
+supabase/.temp/
+supabase/.branches/
+
+# macOS
+.DS_Store
+*.swp
+*~
+
+# VS Code (optional — remove if you want to share settings)
+# .vscode/
