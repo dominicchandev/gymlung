@@ -21,6 +21,24 @@ final class FoodEntry {
     var date: Date
     var createdAt: Date
     @Attribute(.externalStorage) var imageData: Data?
+    var componentsData: Data?
+    var scanStatus: String?  // nil = done, "scanning" = in-flight, "failed" = error
+
+    // MARK: - Computed: Components
+
+    var components: [FoodComponent] {
+        get {
+            guard let data = componentsData else { return [] }
+            return (try? JSONDecoder().decode([FoodComponent].self, from: data)) ?? []
+        }
+        set {
+            componentsData = try? JSONEncoder().encode(newValue)
+        }
+    }
+
+    var isMultiComponent: Bool {
+        components.count > 1
+    }
 
     init(
         name: String,
@@ -31,7 +49,9 @@ final class FoodEntry {
         servingSize: String = "1份",
         mealType: String = "午餐",
         date: Date = Date(),
-        imageData: Data? = nil
+        imageData: Data? = nil,
+        components: [FoodComponent]? = nil,
+        scanStatus: String? = nil
     ) {
         self.id = UUID()
         self.name = name
@@ -44,5 +64,9 @@ final class FoodEntry {
         self.date = date
         self.createdAt = Date()
         self.imageData = imageData
+        self.scanStatus = scanStatus
+        if let components {
+            self.componentsData = try? JSONEncoder().encode(components)
+        }
     }
 }

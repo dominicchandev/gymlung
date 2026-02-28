@@ -16,6 +16,7 @@ struct ProgressPage: View {
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
 
     @State private var showWeightLog = false
+    @State private var showPaywall = false
     @State private var chartRange: ChartRange = .ninety
     @State private var seeded = false
 
@@ -115,7 +116,19 @@ struct ProgressPage: View {
 
                         // Log button
                         ActionButton(title: AppStrings.Progress.logTitle(mode)) {
-                            showWeightLog = true
+                            if PurchaseManager.shared.isPro {
+                                showWeightLog = true
+                            } else {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    showPaywall = true
+                                }
+                            }
+                        }
+                        .overlay(alignment: .topTrailing) {
+                            if !PurchaseManager.shared.isPro {
+                                ProBadge()
+                                    .offset(x: -8, y: -8)
+                            }
                         }
                         .padding(.horizontal, 20)
 
@@ -129,6 +142,9 @@ struct ProgressPage: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .sheet(isPresented: $showWeightLog) {
                 WeightLogSheet()
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallSheet()
             }
             .onAppear { seedIfNeeded() }
         }

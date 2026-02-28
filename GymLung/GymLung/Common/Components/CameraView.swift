@@ -16,6 +16,7 @@ struct CameraView: View {
     @Environment(\.dismiss) private var dismiss
     @StateObject private var camera = CameraModel()
     @State private var scanLineOffset: CGFloat = 0
+    @State private var viewSize: CGSize = .zero
 
     var body: some View {
         ZStack {
@@ -43,9 +44,45 @@ struct CameraView: View {
         }
         .onChange(of: camera.capturedImage) { _, image in
             if let image {
-                onCapture(image)
+                let cropped = cropToScanRect(image)
+                onCapture(cropped)
                 dismiss()
             }
+        }
+    }
+
+    // MARK: - Crop to Scan Rect
+
+    private func cropToScanRect(_ image: UIImage) -> UIImage {
+        guard viewSize.width > 0, viewSize.height > 0 else { return image }
+
+        let scanSize = viewSize.width - 60
+        let scanRect = CGRect(
+            x: 30,
+            y: (viewSize.height - scanSize) / 2 - 40,
+            width: scanSize,
+            height: scanSize
+        )
+
+        let imageSize = image.size
+        // AspectFill: scale so the image fills the view
+        let scale = max(viewSize.width / imageSize.width, viewSize.height / imageSize.height)
+        let displayedWidth = imageSize.width * scale
+        let displayedHeight = imageSize.height * scale
+        let offsetX = (displayedWidth - viewSize.width) / 2
+        let offsetY = (displayedHeight - viewSize.height) / 2
+
+        // Convert scan rect from view coordinates to image coordinates
+        let cropRect = CGRect(
+            x: (scanRect.origin.x + offsetX) / scale,
+            y: (scanRect.origin.y + offsetY) / scale,
+            width: scanRect.width / scale,
+            height: scanRect.height / scale
+        )
+
+        let renderer = UIGraphicsImageRenderer(size: cropRect.size)
+        return renderer.image { _ in
+            image.draw(at: CGPoint(x: -cropRect.origin.x, y: -cropRect.origin.y))
         }
     }
 
@@ -93,6 +130,9 @@ struct CameraView: View {
 
             // Dimmed area with cutout
             ZStack {
+                Color.clear
+                    .onAppear { viewSize = geo.size }
+                    .onChange(of: geo.size) { _, newSize in viewSize = newSize }
                 // Semi-transparent overlay
                 Rectangle()
                     .fill(.black.opacity(0.5))

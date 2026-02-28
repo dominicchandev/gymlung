@@ -28,15 +28,12 @@ struct SignInPage: View {
 
                 // Logo area
                 VStack(spacing: 20) {
-                    ZStack {
-                        Circle()
-                            .fill(Theme.neonGreen.opacity(0.15))
-                            .frame(width: 120, height: 120)
-
-                        Image(systemName: "flame.fill")
-                            .font(.system(size: 50))
-                            .foregroundColor(Theme.neonGreen)
-                    }
+                    Image("AppLogo")
+                        .renderingMode(.template)
+                        .resizable()
+                        .scaledToFit()
+                        .foregroundColor(Theme.neonGreen)
+                        .frame(width: 100, height: 100)
                     .opacity(showContent ? 1 : 0)
                     .offset(y: showContent ? 0 : 20)
 

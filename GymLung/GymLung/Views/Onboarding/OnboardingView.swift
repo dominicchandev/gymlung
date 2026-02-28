@@ -7,6 +7,7 @@
 
 import SwiftUI
 import SwiftData
+import StoreKit
 import UserNotifications
 
 struct OnboardingView: View {
@@ -14,6 +15,7 @@ struct OnboardingView: View {
     @Environment(AppStateManager.self) var appStateManager
     @Environment(AuthManager.self) var authManager
     @Environment(DataSyncManager.self) var dataSyncManager
+    @Environment(\.requestReview) private var requestReview
 
     @State var currentPage: OnboardingPage = .welcome
     @State var onboardingStates = OnboardingUserStates()
@@ -111,7 +113,7 @@ struct OnboardingView: View {
 
             VStack(spacing: 0) {
                 // Progress bar
-                if currentPage != .welcome && currentPage != .paywall {
+                if currentPage != .welcome && currentPage != .paywall && currentPage != .summary {
                     HStack(spacing: 12) {
                         Button(action: goBack) {
                             Image(systemName: "chevron.left")
@@ -187,13 +189,14 @@ struct OnboardingView: View {
                             dinnerTime: $onboardingStates.dinnerTime,
                             onProceed: handleMealTimesComplete
                         )
-                    case .paywall:
-                        PaywallPage(onProceed: goToNext)
                     case .summary:
                         OnboardingSummaryPage(
                             states: onboardingStates,
-                            onComplete: completeOnboarding
+                            onComplete: goToNext
                         )
+                        .onAppear { requestReview() }
+                    case .paywall:
+                        PaywallPage(onProceed: completeOnboarding)
                     }
                 }
                 .transition(.asymmetric(

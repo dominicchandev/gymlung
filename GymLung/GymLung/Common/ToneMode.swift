@@ -23,7 +23,7 @@ enum ToneMode: String, CaseIterable {
         case .adult: return "18+ 🤬"
         case .gentle: return "仁慈 🥺"
         case .twGanHua: return "幹話王 🤡"
-        case .twAma: return "阿嬤碎念 👵"
+        case .twAma: return "阿嬤碎念 👵🏻"
         case .twYanShi: return "厭世仙人掌 🌵"
         }
     }
@@ -71,6 +71,13 @@ enum ToneMode: String, CaseIterable {
         switch self {
         case .normal, .adult, .gentle: return .hk
         case .twGanHua, .twAma, .twYanShi: return .tw
+        }
+    }
+
+    var isFree: Bool {
+        switch self {
+        case .normal, .twGanHua: return true
+        case .adult, .gentle, .twAma, .twYanShi: return false
         }
     }
 }

@@ -14,31 +14,43 @@ struct AppRootContent: View {
     @AppStorage("colorTheme") private var colorTheme: String = ColorTheme.amber.rawValue
     @Query private var profiles: [UserProfile]
 
+    @State private var splashFinished = false
+
     var body: some View {
-        Group {
-            switch appStateManager.state {
-            case .loading:
-                ZStack {
-                    Theme.bg.ignoresSafeArea()
-                    ProgressView()
-                        .tint(.white)
+        ZStack {
+            Group {
+                switch appStateManager.state {
+                case .loading:
+                    SplashScreenView()
+
+                case .signIn:
+                    SignInPage()
+
+                case .onboarding:
+                    OnboardingView()
+
+                case .main:
+                    MainTabView()
                 }
+            }
+            .id(colorTheme)
 
-            case .signIn:
-                SignInPage()
-
-            case .onboarding:
-                OnboardingView()
-
-            case .main:
-                MainTabView()
+            // Splash overlay that stays for 2s then fades out
+            if !splashFinished {
+                SplashScreenView()
+                    .transition(.opacity)
+                    .zIndex(1)
             }
         }
-        .id(colorTheme)
         .task {
-            // Restore session on launch (like Rise's initialize pattern)
             await authManager.initialize()
             resolveState()
+
+            // Ensure splash stays at least 2 seconds
+            try? await Task.sleep(for: .seconds(2))
+            withAnimation(.easeOut(duration: 0.5)) {
+                splashFinished = true
+            }
         }
         .onChange(of: authManager.state) { _, _ in
             resolveState()

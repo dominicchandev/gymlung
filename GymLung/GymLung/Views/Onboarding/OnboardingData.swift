@@ -16,8 +16,8 @@ enum OnboardingPage: String, CaseIterable {
     case goal
     case targetWeight
     case mealTimes
-    case paywall
     case summary
+    case paywall
 }
 
 struct OnboardingQuestionData {

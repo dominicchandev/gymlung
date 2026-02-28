@@ -18,11 +18,11 @@ struct ProfilePage: View {
     @Query(sort: \FoodEntry.createdAt, order: .reverse) private var allEntries: [FoodEntry]
     @Query private var weightEntries: [WeightEntry]
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
-    @AppStorage("colorTheme") private var colorThemeRaw: String = ColorTheme.amber.rawValue
+
     @AppStorage("region") private var regionRaw: String = Region.deviceDefault.rawValue
     @AppStorage("lastStreakCelebrationDay") private var lastStreakCelebrationDay: Int = 0
     @State private var showToneSettings = false
-    @State private var showThemePicker = false
+
     @State private var showMealTimesSheet = false
     @State private var showBodyInfoSheet = false
     @State private var showSignOutAlert = false
@@ -78,15 +78,6 @@ struct ProfilePage: View {
                             title: AppStrings.Profile.toneLabel(mode),
                             subtitle: mode.displayName,
                             action: { showToneSettings = true }
-                        )
-
-                        SettingsDivider()
-
-                        SettingsRow(
-                            icon: "paintpalette",
-                            title: AppStrings.Profile.themeLabel(mode),
-                            subtitle: "\(currentTheme.emoji) \(currentTheme.displayName)",
-                            action: { showThemePicker = true }
                         )
 
                         SettingsDivider()
@@ -148,9 +139,7 @@ struct ProfilePage: View {
             .sheet(isPresented: $showToneSettings) {
                 ToneSettingsSheet()
             }
-            .sheet(isPresented: $showThemePicker) {
-                ThemePickerSheet()
-            }
+
             .sheet(isPresented: $showMealTimesSheet) {
                 MealTimesSheet()
             }
@@ -196,10 +185,6 @@ struct ProfilePage: View {
     }
 
     // MARK: - Computed
-
-    private var currentTheme: ColorTheme {
-        ColorTheme(rawValue: colorThemeRaw) ?? .amber
-    }
 
     private var bodyInfoSubtitle: String? {
         guard let p = profile else { return nil }

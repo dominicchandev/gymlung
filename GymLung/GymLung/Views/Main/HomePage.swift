@@ -8,24 +8,30 @@
 import SwiftUI
 import SwiftData
 import AVFoundation
+import PhotosUI
 
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
     @Query(sort: \FoodEntry.createdAt, order: .reverse) private var allEntries: [FoodEntry]
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
+    @AppStorage("region") private var regionRaw: String = Region.deviceDefault.rawValue
     @State private var showAddFoodChoice = false
     @State private var showAddFood = false
     @State private var showCamera = false
-    @State private var capturedImage: UIImage?
     @State private var selectedDate = Date()
     @State private var selectedEntry: FoodEntry?
     @State private var showStreakCelebration = false
     @State private var streakCelebrationDay: Int = 0
     @State private var streakBrokenText: String?
     @State private var previousEntryCount = 0
+    @State private var showPaywall = false
+    @State private var scanner = FoodScannerManager()
+    @State private var roastToast: String?
+    @State private var photoPickerItem: PhotosPickerItem?
 
     private var mode: ToneMode { ToneMode(rawValue: toneModeRaw) ?? .normal }
+    private var region: Region { Region(rawValue: regionRaw) ?? .hk }
 
     private var profile: UserProfile? { profiles.first }
 
@@ -151,9 +157,23 @@ struct HomePage: View {
             }
             .fullScreenCover(isPresented: $showCamera) {
                 CameraView { image in
-                    capturedImage = image
-                    // TODO: Send image to OpenAI for nutrition analysis
+                    PurchaseManager.shared.recordScan()
+                    handleCapturedImage(image)
                 }
+            }
+            .onChange(of: photoPickerItem) { _, item in
+                guard let item else { return }
+                Task {
+                    if let data = try? await item.loadTransferable(type: Data.self),
+                       let image = UIImage(data: data) {
+                        PurchaseManager.shared.recordScan()
+                        handleCapturedImage(image)
+                    }
+                    photoPickerItem = nil
+                }
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallSheet()
             }
             .overlay {
                 if showAddFoodChoice {
@@ -206,6 +226,37 @@ struct HomePage: View {
                     }
                 }
             }
+            .overlay {
+                if let roast = roastToast {
+                    VStack {
+                        Spacer()
+
+                        VStack(spacing: 8) {
+                            Text(mode.roastEmoji)
+                                .font(.system(size: 28))
+                            Text(roast)
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(Theme.neonGreen)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 16)
+                        }
+                        .padding(20)
+                        .background(
+                            RoundedRectangle(cornerRadius: 16)
+                                .fill(Theme.bgCard)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 16)
+                                        .stroke(Theme.neonGreen.opacity(0.4), lineWidth: 1)
+                                )
+                        )
+                        .neonGlow(Theme.neonGreen, radius: 16)
+                        .padding(.horizontal, 40)
+                        .padding(.bottom, 100)
+                    }
+                    .transition(.opacity.combined(with: .scale(scale: 0.9)))
+                    .zIndex(10)
+                }
+            }
         }
     }
 
@@ -214,9 +265,12 @@ struct HomePage: View {
     private var topBar: some View {
         HStack {
             // App branding
-            Image(systemName: "flame.fill")
-                .font(.system(size: 22))
+            Image("AppLogo")
+                .renderingMode(.template)
+                .resizable()
+                .scaledToFit()
                 .foregroundColor(Theme.neonGreen)
+                .frame(width: 28, height: 28)
             Text("GymLung")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
@@ -437,10 +491,14 @@ struct HomePage: View {
             } else {
                 List {
                     ForEach(selectedDateEntries) { entry in
-                        FoodEntryCard(entry: entry)
+                        FoodEntryCard(entry: entry, onRetry: entry.scanStatus == "failed" ? {
+                            retryScanning(entry: entry)
+                        } : nil)
                             .contentShape(Rectangle())
                             .onTapGesture {
-                                selectedEntry = entry
+                                if entry.scanStatus == nil {
+                                    selectedEntry = entry
+                                }
                             }
                             .listRowInsets(EdgeInsets(top: 6, leading: 20, bottom: 6, trailing: 20))
                             .listRowBackground(Color.clear)
@@ -483,7 +541,7 @@ struct HomePage: View {
                 }
 
             // Choice cards
-            HStack(spacing: 16) {
+            HStack(spacing: 12) {
                 // Search card
                 addFoodOptionCard(
                     icon: "magnifyingglass",
@@ -502,13 +560,75 @@ struct HomePage: View {
                     icon: "camera.fill",
                     label: "掃描"
                 ) {
-                    withAnimation(.easeOut(duration: 0.2)) {
-                        showAddFoodChoice = false
+                    if PurchaseManager.shared.canScan {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            showAddFoodChoice = false
+                        }
+                        requestCameraAndOpen()
+                    } else {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            showAddFoodChoice = false
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            showPaywall = true
+                        }
                     }
-                    requestCameraAndOpen()
+                }
+                .overlay(alignment: .topTrailing) {
+                    if !PurchaseManager.shared.canScan {
+                        ProBadge()
+                            .padding(6)
+                    }
+                }
+
+                // Upload photo card
+                if PurchaseManager.shared.canScan {
+                    PhotosPicker(selection: $photoPickerItem, matching: .images) {
+                        VStack(spacing: 14) {
+                            Image(systemName: "photo.on.rectangle")
+                                .font(.system(size: 32, weight: .medium))
+                                .foregroundColor(Theme.neonGreen)
+
+                            Text("相簿")
+                                .font(.system(size: 16, weight: .semibold))
+                                .foregroundColor(.white)
+                        }
+                        .frame(maxWidth: .infinity)
+                        .frame(height: 130)
+                        .background(
+                            RoundedRectangle(cornerRadius: 20)
+                                .fill(Theme.bgCard)
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(Theme.border, lineWidth: 1)
+                                )
+                        )
+                    }
+                    .buttonStyle(.plain)
+                    .onChange(of: photoPickerItem) { _, _ in
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            showAddFoodChoice = false
+                        }
+                    }
+                } else {
+                    addFoodOptionCard(
+                        icon: "photo.on.rectangle",
+                        label: "相簿"
+                    ) {
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            showAddFoodChoice = false
+                        }
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                            showPaywall = true
+                        }
+                    }
+                    .overlay(alignment: .topTrailing) {
+                        ProBadge()
+                            .padding(6)
+                    }
                 }
             }
-            .padding(.horizontal, 40)
+            .padding(.horizontal, 24)
         }
     }
 
@@ -591,6 +711,80 @@ struct HomePage: View {
             case .continued, .broken:
                 break
             }
+        }
+    }
+
+    // MARK: - Background Scan
+
+    private func handleCapturedImage(_ image: UIImage) {
+        guard let jpegData = image.jpegData(compressionQuality: 0.7) else { return }
+
+        let entry = FoodEntry(
+            name: "掃描中...",
+            calories: 0,
+            date: Date(),
+            imageData: jpegData,
+            scanStatus: "scanning"
+        )
+        modelContext.insert(entry)
+        previousEntryCount = allEntries.count
+
+        Task {
+            await performScan(entry: entry, imageData: jpegData)
+        }
+    }
+
+    private func retryScanning(entry: FoodEntry) {
+        guard let imageData = entry.imageData else { return }
+        entry.name = "掃描中..."
+        entry.scanStatus = "scanning"
+
+        Task {
+            await performScan(entry: entry, imageData: imageData)
+        }
+    }
+
+    private func performScan(entry: FoodEntry, imageData: Data) async {
+        do {
+            let result = try await scanner.scan(imageData: imageData, toneMode: mode, region: region)
+
+            // Build name + components from result
+            let items = result.food_items
+            let components: [FoodComponent] = items.map { item in
+                FoodComponent(
+                    nameZH: item.name_zh,
+                    nameEN: item.name_en,
+                    calories: item.estimated_calories,
+                    proteinG: item.protein_g,
+                    carbsG: item.carbs_g,
+                    fatG: item.fat_g,
+                    portionDescription: item.portion_description,
+                    confidence: item.confidence
+                )
+            }
+
+            entry.name = items.map(\.name_zh).joined(separator: " + ")
+            entry.calories = result.total_calories
+            entry.proteinG = items.reduce(0) { $0 + $1.protein_g }
+            entry.carbsG = items.reduce(0) { $0 + $1.carbs_g }
+            entry.fatG = items.reduce(0) { $0 + $1.fat_g }
+            entry.servingSize = items.count == 1 ? items[0].portion_description : "\(items.count)項"
+            entry.components = components
+            entry.scanStatus = nil
+
+            // Show roast toast
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
+                roastToast = result.roast_comment
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
+                withAnimation { roastToast = nil }
+            }
+
+            // Check streak
+            checkStreakAfterFoodLog()
+        } catch {
+            entry.name = "掃描失敗"
+            entry.scanStatus = "failed"
         }
     }
 

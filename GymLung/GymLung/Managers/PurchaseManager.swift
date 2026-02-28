@@ -6,6 +6,7 @@
 //
 
 import Foundation
+import SwiftUI
 import RevenueCat
 
 @Observable
@@ -65,5 +66,52 @@ class PurchaseManager {
             print("Error restoring: \(error)")
             return false
         }
+    }
+
+    // MARK: - Daily Scan Tracking
+
+    private let defaults = UserDefaults.standard
+    private static let scanCountKey = "dailyScanCount"
+    private static let scanDateKey = "lastScanDate"
+
+    var dailyScanCount: Int {
+        get { defaults.integer(forKey: Self.scanCountKey) }
+        set { defaults.set(newValue, forKey: Self.scanCountKey) }
+    }
+
+    private var lastScanDate: String {
+        get { defaults.string(forKey: Self.scanDateKey) ?? "" }
+        set { defaults.set(newValue, forKey: Self.scanDateKey) }
+    }
+
+    var canScan: Bool {
+        if isPro { return true }
+        resetIfNewDay()
+        return dailyScanCount < 2
+    }
+
+    var remainingScans: Int {
+        if isPro { return .max }
+        resetIfNewDay()
+        return max(0, 2 - dailyScanCount)
+    }
+
+    func recordScan() {
+        resetIfNewDay()
+        dailyScanCount += 1
+    }
+
+    private func resetIfNewDay() {
+        let today = Self.todayString()
+        if lastScanDate != today {
+            dailyScanCount = 0
+            lastScanDate = today
+        }
+    }
+
+    private static func todayString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter.string(from: Date())
     }
 }

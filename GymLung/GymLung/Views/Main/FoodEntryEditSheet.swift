@@ -17,9 +17,24 @@ struct FoodEntryEditSheet: View {
     @State private var fat: String
 
     @State private var editingField: NutritionField?
+    @State private var componentEdits: [ComponentEdit]
 
     private enum NutritionField: Hashable {
         case calories, protein, carbs, fat
+        case componentCal(UUID)
+        case componentProtein(UUID)
+        case componentCarbs(UUID)
+        case componentFat(UUID)
+    }
+
+    struct ComponentEdit: Identifiable {
+        let id: UUID
+        var nameZH: String
+        var calories: String
+        var protein: String
+        var carbs: String
+        var fat: String
+        var portionDescription: String
     }
 
     private var hasPhoto: Bool {
@@ -41,6 +56,17 @@ struct FoodEntryEditSheet: View {
         _protein = State(initialValue: "\(Int(entry.proteinG))")
         _carbs = State(initialValue: "\(Int(entry.carbsG))")
         _fat = State(initialValue: "\(Int(entry.fatG))")
+        _componentEdits = State(initialValue: entry.components.map { comp in
+            ComponentEdit(
+                id: comp.id,
+                nameZH: comp.nameZH,
+                calories: "\(comp.calories)",
+                protein: "\(Int(comp.proteinG))",
+                carbs: "\(Int(comp.carbsG))",
+                fat: "\(Int(comp.fatG))",
+                portionDescription: comp.portionDescription
+            )
+        })
     }
 
     var body: some View {
@@ -58,13 +84,11 @@ struct FoodEntryEditSheet: View {
 
     private var noPhotoLayout: some View {
         VStack(spacing: 0) {
-            // Nav bar
             navBar
                 .padding(.top, 8)
 
             ScrollView {
                 VStack(alignment: .leading, spacing: 24) {
-                    // Food name + time
                     VStack(alignment: .leading, spacing: 8) {
                         Text(entry.name)
                             .font(.system(size: 26, weight: .bold))
@@ -76,8 +100,7 @@ struct FoodEntryEditSheet: View {
                     }
                     .padding(.horizontal, 20)
 
-                    // Nutrition cards
-                    nutritionSection
+                    editableContent
                         .padding(.horizontal, 20)
 
                     Spacer().frame(height: 80)
@@ -85,7 +108,6 @@ struct FoodEntryEditSheet: View {
                 .padding(.top, 16)
             }
 
-            // Save button
             saveButton
         }
     }
@@ -94,7 +116,6 @@ struct FoodEntryEditSheet: View {
 
     private var photoLayout: some View {
         VStack(spacing: 0) {
-            // Image fills top
             ZStack(alignment: .topLeading) {
                 if let data = entry.imageData, let uiImage = UIImage(data: data) {
                     Image(uiImage: uiImage)
@@ -105,7 +126,6 @@ struct FoodEntryEditSheet: View {
                         .clipped()
                 }
 
-                // Back button overlay
                 Button { dismiss() } label: {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 17, weight: .semibold))
@@ -117,10 +137,8 @@ struct FoodEntryEditSheet: View {
                 .padding(.top, 8)
             }
 
-            // Bottom sheet content
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    // Time pill + food name
                     VStack(alignment: .leading, spacing: 10) {
                         Text(timeString)
                             .font(.system(size: 13, weight: .medium))
@@ -137,8 +155,7 @@ struct FoodEntryEditSheet: View {
                     }
                     .padding(.horizontal, 20)
 
-                    // Nutrition cards
-                    nutritionSection
+                    editableContent
                         .padding(.horizontal, 20)
 
                     Spacer().frame(height: 80)
@@ -161,6 +178,144 @@ struct FoodEntryEditSheet: View {
         }
     }
 
+    // MARK: - Editable Content
+
+    @ViewBuilder
+    private var editableContent: some View {
+        if entry.isMultiComponent && !componentEdits.isEmpty {
+            // Multi-component: show each component separately
+            VStack(spacing: 16) {
+                // Aggregate totals header
+                aggregateTotalsCard
+
+                // Individual components
+                ForEach($componentEdits) { $comp in
+                    componentSection(comp: $comp)
+                }
+            }
+        } else {
+            // Single entry: original nutrition cards
+            nutritionSection
+        }
+    }
+
+    // MARK: - Aggregate Totals (Multi-Component)
+
+    private var aggregateTotalsCard: some View {
+        let totalCal = componentEdits.reduce(0) { $0 + (Int($1.calories) ?? 0) }
+        let totalP = componentEdits.reduce(0) { $0 + (Int($1.protein) ?? 0) }
+        let totalC = componentEdits.reduce(0) { $0 + (Int($1.carbs) ?? 0) }
+        let totalF = componentEdits.reduce(0) { $0 + (Int($1.fat) ?? 0) }
+
+        return VStack(spacing: 8) {
+            Text("總計")
+                .font(.system(size: 13, weight: .medium))
+                .foregroundColor(Theme.textSecondary)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+            HStack(spacing: 16) {
+                VStack(spacing: 2) {
+                    Text("🔥 \(totalCal)")
+                        .font(.system(size: 20, weight: .bold).monospacedDigit())
+                        .foregroundColor(.white)
+                    Text("kcal")
+                        .font(.system(size: 11))
+                        .foregroundColor(Theme.textTertiary)
+                }
+                Spacer()
+                miniMacro(emoji: "🍗", value: totalP, unit: "g")
+                miniMacro(emoji: "🌾", value: totalC, unit: "g")
+                miniMacro(emoji: "🫐", value: totalF, unit: "g")
+            }
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Theme.bgElevated)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Theme.neonGreen.opacity(0.3), lineWidth: 1)
+                )
+        )
+    }
+
+    private func miniMacro(emoji: String, value: Int, unit: String) -> some View {
+        VStack(spacing: 2) {
+            HStack(spacing: 2) {
+                Text(emoji)
+                    .font(.system(size: 12))
+                Text("\(value)")
+                    .font(.system(size: 15, weight: .bold).monospacedDigit())
+                    .foregroundColor(.white)
+            }
+            Text(unit)
+                .font(.system(size: 10))
+                .foregroundColor(Theme.textTertiary)
+        }
+    }
+
+    // MARK: - Component Section
+
+    private func componentSection(comp: Binding<ComponentEdit>) -> some View {
+        VStack(alignment: .leading, spacing: 10) {
+            // Component name + portion
+            HStack {
+                Text(comp.wrappedValue.nameZH)
+                    .font(.system(size: 15, weight: .semibold))
+                    .foregroundColor(.white)
+                Spacer()
+                Text(comp.wrappedValue.portionDescription)
+                    .font(.system(size: 12))
+                    .foregroundColor(Theme.textTertiary)
+            }
+
+            // Nutrition cards for this component
+            let compId = comp.wrappedValue.id
+            VStack(spacing: 8) {
+                nutritionCard(
+                    emoji: "🔥",
+                    label: "卡路里",
+                    value: comp.calories,
+                    field: .componentCal(compId),
+                    unit: "kcal"
+                )
+
+                HStack(spacing: 8) {
+                    nutritionCard(
+                        emoji: "🍗",
+                        label: "蛋白質",
+                        value: comp.protein,
+                        field: .componentProtein(compId),
+                        unit: "g"
+                    )
+                    nutritionCard(
+                        emoji: "🌾",
+                        label: "碳水",
+                        value: comp.carbs,
+                        field: .componentCarbs(compId),
+                        unit: "g"
+                    )
+                    nutritionCard(
+                        emoji: "🫐",
+                        label: "脂肪",
+                        value: comp.fat,
+                        field: .componentFat(compId),
+                        unit: "g"
+                    )
+                }
+            }
+        }
+        .padding(14)
+        .background(
+            RoundedRectangle(cornerRadius: 14)
+                .fill(Theme.bgCard)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14)
+                        .stroke(Theme.bgDivider, lineWidth: 1)
+                )
+        )
+    }
+
     // MARK: - Nav Bar
 
     private var navBar: some View {
@@ -181,17 +336,15 @@ struct FoodEntryEditSheet: View {
 
             Spacer()
 
-            // Invisible spacer for centering
             Color.clear.frame(width: 40, height: 40)
         }
         .padding(.horizontal, 16)
     }
 
-    // MARK: - Nutrition Section
+    // MARK: - Nutrition Section (Single Entry)
 
     private var nutritionSection: some View {
         VStack(spacing: 12) {
-            // Calories card (full width)
             nutritionCard(
                 emoji: "🔥",
                 label: "卡路里",
@@ -200,7 +353,6 @@ struct FoodEntryEditSheet: View {
                 unit: "kcal"
             )
 
-            // Macro cards row
             HStack(spacing: 10) {
                 nutritionCard(
                     emoji: "🍗",
@@ -235,6 +387,12 @@ struct FoodEntryEditSheet: View {
         unit: String
     ) -> some View {
         let isEditing = editingField == field
+        let isCalories = {
+            switch field {
+            case .calories, .componentCal: return true
+            default: return false
+            }
+        }()
 
         return VStack(alignment: .leading, spacing: 6) {
             HStack(spacing: 6) {
@@ -248,18 +406,18 @@ struct FoodEntryEditSheet: View {
             HStack(spacing: 4) {
                 if isEditing {
                     TextField("0", text: value)
-                        .font(.system(size: field == .calories ? 32 : 22, weight: .bold).monospacedDigit())
+                        .font(.system(size: isCalories ? 32 : 22, weight: .bold).monospacedDigit())
                         .foregroundColor(.white)
                         .keyboardType(.numberPad)
                         .multilineTextAlignment(.leading)
                         .fixedSize()
                 } else {
                     Text(value.wrappedValue)
-                        .font(.system(size: field == .calories ? 32 : 22, weight: .bold).monospacedDigit())
+                        .font(.system(size: isCalories ? 32 : 22, weight: .bold).monospacedDigit())
                         .foregroundColor(.white)
                 }
 
-                if field != .calories {
+                if !isCalories {
                     Text(unit)
                         .font(.system(size: 14))
                         .foregroundColor(Theme.textTertiary)
@@ -301,10 +459,31 @@ struct FoodEntryEditSheet: View {
     }
 
     private func save() {
-        entry.calories = Int(calories) ?? entry.calories
-        entry.proteinG = Double(Int(protein) ?? Int(entry.proteinG))
-        entry.carbsG = Double(Int(carbs) ?? Int(entry.carbsG))
-        entry.fatG = Double(Int(fat) ?? Int(entry.fatG))
+        if entry.isMultiComponent && !componentEdits.isEmpty {
+            // Recompute from component edits
+            var updatedComponents = entry.components
+            for edit in componentEdits {
+                if let idx = updatedComponents.firstIndex(where: { $0.id == edit.id }) {
+                    updatedComponents[idx].calories = Int(edit.calories) ?? updatedComponents[idx].calories
+                    updatedComponents[idx].proteinG = Double(Int(edit.protein) ?? Int(updatedComponents[idx].proteinG))
+                    updatedComponents[idx].carbsG = Double(Int(edit.carbs) ?? Int(updatedComponents[idx].carbsG))
+                    updatedComponents[idx].fatG = Double(Int(edit.fat) ?? Int(updatedComponents[idx].fatG))
+                }
+            }
+            entry.components = updatedComponents
+
+            // Recompute aggregated totals
+            entry.calories = updatedComponents.reduce(0) { $0 + $1.calories }
+            entry.proteinG = updatedComponents.reduce(0) { $0 + $1.proteinG }
+            entry.carbsG = updatedComponents.reduce(0) { $0 + $1.carbsG }
+            entry.fatG = updatedComponents.reduce(0) { $0 + $1.fatG }
+        } else {
+            // Single entry: use direct values
+            entry.calories = Int(calories) ?? entry.calories
+            entry.proteinG = Double(Int(protein) ?? Int(entry.proteinG))
+            entry.carbsG = Double(Int(carbs) ?? Int(entry.carbsG))
+            entry.fatG = Double(Int(fat) ?? Int(entry.fatG))
+        }
         dismiss()
     }
 }

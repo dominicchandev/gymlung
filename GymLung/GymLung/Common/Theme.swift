@@ -161,7 +161,7 @@ enum Theme {
 
     static func bmiColor(_ bmi: Double) -> Color {
         switch bmi {
-        case ..<18.5: return neonAmber
+        case ..<18.5: return neonBlue
         case 18.5..<24: return neonGreen
         case 24..<28: return neonAmber
         default: return neonRed

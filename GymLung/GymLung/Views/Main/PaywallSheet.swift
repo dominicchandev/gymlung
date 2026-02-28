@@ -1,16 +1,13 @@
 //
-//  PaywallPage.swift
+//  PaywallSheet.swift
 //  GymLung
-//
-//  Created by Chan Tin Lok on 27/2/2026.
 //
 
 import SwiftUI
 import RevenueCat
 
-struct PaywallPage: View {
-    var onProceed: () -> Void  // called when user subscribes OR dismisses
-
+struct PaywallSheet: View {
+    @Environment(\.dismiss) private var dismiss
     @AppStorage("region") private var regionRaw: String = Region.hk.rawValue
     private var region: Region { Region(rawValue: regionRaw) ?? .hk }
 
@@ -32,9 +29,9 @@ struct PaywallPage: View {
             Theme.bg.ignoresSafeArea()
 
             VStack(spacing: 0) {
-                // Cancel button top-left, restore top-right
+                // Top bar
                 HStack {
-                    Button(action: { onProceed() }) {
+                    Button(action: { dismiss() }) {
                         Image(systemName: "xmark")
                             .font(.system(size: 16, weight: .semibold))
                             .foregroundColor(Theme.textSecondary)
@@ -43,12 +40,11 @@ struct PaywallPage: View {
                     }
                     Spacer()
 
-                    // Restore button top-right
+                    // Restore button
                     Button(action: {
                         Task {
-                            let manager = PurchaseManager.shared
-                            let restored = await manager.restorePurchases()
-                            if restored { onProceed() }
+                            let restored = await PurchaseManager.shared.restorePurchases()
+                            if restored { dismiss() }
                         }
                     }) {
                         Text(AppStrings.Paywall.restore(region))
@@ -57,7 +53,7 @@ struct PaywallPage: View {
                     }
                 }
                 .padding(.horizontal, 20)
-                .padding(.top, 12)
+                .padding(.top, 16)
 
                 Spacer().frame(height: 20)
 
@@ -71,7 +67,6 @@ struct PaywallPage: View {
 
                 Spacer().frame(height: 16)
 
-                // Title
                 Text(AppStrings.Paywall.title(region))
                     .font(.system(size: 28, weight: .bold))
                     .foregroundColor(.white)
@@ -102,7 +97,6 @@ struct PaywallPage: View {
                 // Package selection
                 if let monthly = monthlyPackage, let annual = annualPackage {
                     VStack(spacing: 12) {
-                        // Annual option (highlighted)
                         PackageOptionCard(
                             package: annual,
                             label: AppStrings.Paywall.annualLabel(region),
@@ -112,8 +106,6 @@ struct PaywallPage: View {
                             isSelected: selectedPackage?.identifier == annual.identifier,
                             onTap: { selectedPackage = annual }
                         )
-
-                        // Monthly option
                         PackageOptionCard(
                             package: monthly,
                             label: AppStrings.Paywall.monthlyLabel(region),
@@ -133,7 +125,6 @@ struct PaywallPage: View {
 
                 Spacer().frame(height: 20)
 
-                // Subscribe button
                 ActionButton(
                     title: isPurchasing ? "處理中..." : AppStrings.Paywall.cta(region),
                     disabled: selectedPackage == nil || isPurchasing
@@ -143,7 +134,7 @@ struct PaywallPage: View {
                     Task {
                         let success = await PurchaseManager.shared.purchase(pkg)
                         isPurchasing = false
-                        if success { onProceed() }
+                        if success { dismiss() }
                     }
                 }
                 .padding(.horizontal, 24)
@@ -155,97 +146,12 @@ struct PaywallPage: View {
             isLoading = true
             do {
                 offerings = try await Purchases.shared.offerings()
-                // Default select annual
                 selectedPackage = annualPackage
             } catch {
                 print("Error loading offerings: \(error)")
             }
             isLoading = false
         }
-    }
-}
-
-// MARK: - Feature Row
-
-struct PaywallFeatureRow: View {
-    let icon: String
-    let text: String
-
-    var body: some View {
-        HStack(spacing: 14) {
-            Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundColor(Theme.neonGreen)
-                .frame(width: 28)
-
-            Text(text)
-                .font(.system(size: 16))
-                .foregroundColor(.white)
-
-            Spacer()
-        }
-    }
-}
-
-// MARK: - Package Option Card
-
-struct PackageOptionCard: View {
-    let package: Package
-    let label: String
-    let priceLabel: String
-    let subtitle: String?
-    let badge: String?
-    let isSelected: Bool
-    let onTap: () -> Void
-
-    var body: some View {
-        Button(action: onTap) {
-            HStack {
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(spacing: 8) {
-                        Text(label)
-                            .font(.system(size: 17, weight: .semibold))
-                            .foregroundColor(.white)
-
-                        if let badge {
-                            Text(badge)
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.black)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(Capsule().fill(Theme.neonGreen))
-                        }
-                    }
-
-                    Text(priceLabel)
-                        .font(.system(size: 14))
-                        .foregroundColor(Theme.textSecondary)
-
-                    if let subtitle {
-                        Text(subtitle)
-                            .font(.system(size: 12))
-                            .foregroundColor(Theme.textSecondary.opacity(0.7))
-                    }
-                }
-
-                Spacer()
-
-                // Radio indicator
-                Circle()
-                    .strokeBorder(isSelected ? Theme.neonGreen : Theme.border, lineWidth: 2)
-                    .background(Circle().fill(isSelected ? Theme.neonGreen : Color.clear))
-                    .frame(width: 22, height: 22)
-            }
-            .padding(16)
-            .background(
-                RoundedRectangle(cornerRadius: 12)
-                    .fill(Theme.bgCard)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 12)
-                            .stroke(isSelected ? Theme.neonGreen : Theme.border, lineWidth: isSelected ? 2 : 1)
-                    )
-            )
-        }
-        .buttonStyle(.plain)
+        .interactiveDismissDisabled(isPurchasing)
     }
 }

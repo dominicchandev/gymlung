@@ -45,6 +45,9 @@ struct GymLungApp: App {
                 .environment(authManager)
                 .environment(dataSyncManager)
                 .preferredColorScheme(.dark)
+                .task {
+                    await PurchaseManager.shared.checkEntitlement()
+                }
         }
         .modelContainer(sharedModelContainer)
     }

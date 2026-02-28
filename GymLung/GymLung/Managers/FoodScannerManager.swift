@@ -31,37 +31,27 @@ struct ScanFoodRequest: Encodable {
     let image_base64: String
     let meal_type: String?
     let tone_mode: String?
+    let region: String?
 }
 
 @MainActor
-@Observable
 class FoodScannerManager {
-    var isScanning = false
-    var scanResult: FoodScanResult?
-    var errorMessage: String?
 
-    func scanFood(imageData: Data, mealType: String? = nil, toneMode: ToneMode = .normal) async {
-        isScanning = true
-        errorMessage = nil
-        scanResult = nil
+    func scan(imageData: Data, toneMode: ToneMode = .normal, region: Region = .hk) async throws -> FoodScanResult {
+        let compressedData = compressImage(imageData, maxDimension: 1024)
+        let base64String = compressedData.base64EncodedString()
 
-        do {
-            // Resize image to ~1024px max and compress as JPEG
-            let compressedData = compressImage(imageData, maxDimension: 1024)
-            let base64String = compressedData.base64EncodedString()
-
-            // Call Supabase Edge Function — SDK auto-decodes the response
-            let request = ScanFoodRequest(image_base64: base64String, meal_type: mealType, tone_mode: toneMode.rawValue)
-            let result: FoodScanResult = try await SupabaseConfig.client.functions.invoke(
-                "scan-food",
-                options: FunctionInvokeOptions(body: request)
-            )
-            scanResult = result
-        } catch {
-            errorMessage = "掃描失敗：\(error.localizedDescription)"
-        }
-
-        isScanning = false
+        let request = ScanFoodRequest(
+            image_base64: base64String,
+            meal_type: nil,
+            tone_mode: toneMode.rawValue,
+            region: region.rawValue
+        )
+        let result: FoodScanResult = try await SupabaseConfig.client.functions.invoke(
+            "scan-food",
+            options: FunctionInvokeOptions(body: request)
+        )
+        return result
     }
 
     private func compressImage(_ data: Data, maxDimension: CGFloat) -> Data {

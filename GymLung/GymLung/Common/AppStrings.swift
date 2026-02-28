@@ -71,7 +71,7 @@ enum AppStrings {
     struct Welcome {
         static func subtitle(_ m: ToneMode) -> String {
             switch m {
-            case .normal: return "專鬧你食垃圾嘅 app"
+            case .normal: return "你個Gym Lung Bro已經睇唔過眼\n要親自幫你計卡路里"
             case .adult: return "專屌你食垃圾嘅 app"
             case .gentle: return "你嘅健康小幫手 ✨"
             case .twGanHua: return "一個會跟你講幹話的熱量 app"
@@ -476,115 +476,80 @@ enum AppStrings {
     // MARK: - Paywall Page
 
     struct Paywall {
-        static func title(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "想瘦？升級啦"
-            case .adult: return "升級做 Pro"
-            case .gentle: return "解鎖全部功能～"
-            case .twGanHua: return "想瘦？升級吧"
-            case .twAma: return "升級一下嘛，阿嬤幫你出～"
-            case .twYanShi: return "...付費功能，資本主義的味道"
+        static func title(_ r: Region) -> String {
+            switch r {
+            case .hk: return "想瘦？升級啦"
+            case .tw: return "想瘦？升級吧"
             }
         }
-        static func subtitle(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "免費版夠你用 但你瘦唔到唔好怪我"
-            case .adult: return "免費版夠你用 但Pro版屌你屌得更狠"
-            case .gentle: return "更多功能幫你達成目標 ✨"
-            case .twGanHua: return "免費版能用 但你瘦不下來不要怪我"
-            case .twAma: return "升級了功能更多，阿嬤覺得划算啦～"
-            case .twYanShi: return "...免費版也能用，付費只是多一點絕望的功能"
+        static func subtitle(_ r: Region) -> String {
+            switch r {
+            case .hk: return "免費版夠你用 但你瘦唔到唔好怪我"
+            case .tw: return "免費版能用 但你瘦不下來不要怪我"
             }
         }
-        static func feature1(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "AI幫你認食物 唔使自己打"
-            case .adult: return "AI影相辨識食物"
-            case .gentle: return "AI影相辨識食物 📸"
-            case .twGanHua: return "AI拍照辨識食物，比你自己認還準"
-            case .twAma: return "拍照就能記錄，很方便喔～"
-            case .twYanShi: return "AI辨識食物...科技讓偷吃無所遁形"
+        static func feature1(_ r: Region) -> String {
+            switch r {
+            case .hk: return "AI幫你認食物 唔使自己打"
+            case .tw: return "AI拍照辨識食物 比你自己認還準"
             }
         }
-        static func feature2(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "營養report 睇清楚你食咗啲咩"
-            case .adult: return "詳細營養分析報告"
-            case .gentle: return "詳細營養分析報告 📊"
-            case .twGanHua: return "營養報告，用數據告訴你吃了多少垃圾"
-            case .twAma: return "詳細營養分析，阿嬤幫你看著～"
-            case .twYanShi: return "營養報告...用數字量化你的墮落"
+        static func feature2(_ r: Region) -> String {
+            switch r {
+            case .hk: return "體重追蹤同營養報告 睇晒你嘅進度"
+            case .tw: return "體重追蹤跟營養報告 用數據看你的起伏"
             }
         }
-        static func feature3(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "到時到候提你認數"
-            case .adult: return "自訂提醒時間"
-            case .gentle: return "自訂提醒時間 🔔"
-            case .twGanHua: return "自訂提醒時間，到時候別說沒提醒你"
-            case .twAma: return "設定提醒時間，阿嬤準時叫你～"
-            case .twYanShi: return "自訂提醒...多一個打擾你的理由"
+        static func feature3(_ r: Region) -> String {
+            switch r {
+            case .hk: return "解鎖全部語氣模式 想點串就點串"
+            case .tw: return "解鎖所有語氣模式 讓你被各種方式嘴"
             }
         }
-        static func feature4(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "獨家毒舌語錄"
-            case .adult: return "獨家18+毒舌語錄"
-            case .gentle: return "更多鼓勵語錄 🔥"
-            case .twGanHua: return "獨家幹話語錄"
-            case .twAma: return "更多阿嬤的叮嚀～"
-            case .twYanShi: return "更多厭世語錄...如果你還承受得住"
+        static func feature4(_ r: Region) -> String {
+            switch r {
+            case .hk: return "無限掃描 食幾多影幾多"
+            case .tw: return "無限掃描 讓AI無限次審判你的食物"
             }
         }
-        static func annualLabel(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "年費（識計數）"
-            case .adult: return "年費"
-            case .gentle: return "年費計劃"
-            case .twGanHua: return "年費（會算數的都選這個）"
-            case .twAma: return "年費方案"
-            case .twYanShi: return "年費"
+        static func annualLabel(_ r: Region) -> String {
+            switch r {
+            case .hk: return "年費（識計數）"
+            case .tw: return "年費（會算數的都選這個）"
             }
         }
-        static func monthlyLabel(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "月費（貴啲㗎）"
-            case .adult: return "月費"
-            case .gentle: return "月費計劃"
-            case .twGanHua: return "月費（比較貴，但你開心就好）"
-            case .twAma: return "月費方案"
-            case .twYanShi: return "月費"
+        static func annualSubtitle(_ r: Region) -> String {
+            switch r {
+            case .hk: return "飲少6杯廢水就搞掂一年"
+            case .tw: return "少喝6杯珍奶就一年了"
             }
         }
-        static func saveBadge(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "識揀"
-            case .adult: return "抵啲"
-            case .gentle: return "最受歡迎"
-            case .twGanHua: return "聰明人的選擇"
-            case .twAma: return "最划算"
-            case .twYanShi: return "省一點"
+        static func monthlyLabel(_ r: Region) -> String {
+            switch r {
+            case .hk: return "月費（貴啲㗎）"
+            case .tw: return "月費（比較貴 但你開心就好）"
             }
         }
-        static func cta(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "好啦 畀錢"
-            case .adult: return "即刻升級"
-            case .gentle: return "開始體驗 ✨"
-            case .twGanHua: return "好啦，付錢吧"
-            case .twAma: return "來試試看嘛～"
-            case .twYanShi: return "...隨便吧"
+        static func monthlySubtitle(_ r: Region) -> String {
+            switch r {
+            case .hk: return "每個月飲少杯廢水咪得囉"
+            case .tw: return "每個月少喝杯珍奶而已"
             }
         }
-        static func restore(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "恢復購買"
-            case .adult: return "恢復購買"
-            case .gentle: return "恢復購買"
-            case .twGanHua: return "恢復購買"
-            case .twAma: return "恢復購買"
-            case .twYanShi: return "恢復購買"
+        static func saveBadge(_ r: Region) -> String {
+            switch r {
+            case .hk: return "識揀"
+            case .tw: return "聰明人的選擇"
             }
+        }
+        static func cta(_ r: Region) -> String {
+            switch r {
+            case .hk: return "好啦 畀錢"
+            case .tw: return "好啦 付錢吧"
+            }
+        }
+        static func restore(_ r: Region) -> String {
+            return "恢復購買"
         }
     }
 
@@ -698,7 +663,7 @@ enum AppStrings {
             case (_, .normal): return "仲食？訓啦你"
             case (_, .adult): return "仲食？訓撚啦你"
             case (_, .gentle): return "夜喇，早啲休息呀～💤"
-            case (_, .twGanHua): return "這個時間還在吃東西，根據研究，這很不健康"
+            case (_, .twGanHua): return "這個時間還在吃東西，你的消化系統還在加班"
             case (_, .twAma): return "這麼晚了還不睡？不要吃宵夜啦！"
             case (_, .twYanShi): return "...深夜了，吃不吃都一樣空虛"
             }

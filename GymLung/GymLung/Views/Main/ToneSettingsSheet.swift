@@ -12,6 +12,7 @@ struct ToneSettingsSheet: View {
     @AppStorage("region") private var regionRaw: String = Region.deviceDefault.rawValue
     @Environment(\.dismiss) private var dismiss
     @State private var showAgeConfirm = false
+    @State private var showPaywall = false
 
     private var currentMode: ToneMode {
         ToneMode(rawValue: toneModeRaw) ?? .normal
@@ -38,17 +39,29 @@ struct ToneSettingsSheet: View {
 
                     ForEach(availableModes, id: \.rawValue) { mode in
                         Button(action: {
-                            if mode == .adult && currentMode != .adult {
-                                showAgeConfirm = true
+                            if mode.isFree || PurchaseManager.shared.isPro {
+                                if mode == .adult && currentMode != .adult {
+                                    showAgeConfirm = true
+                                } else {
+                                    toneModeRaw = mode.rawValue
+                                }
                             } else {
-                                toneModeRaw = mode.rawValue
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                    showPaywall = true
+                                }
                             }
                         }) {
                             HStack(spacing: 16) {
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(mode.displayName)
-                                        .font(.system(size: 16, weight: .semibold))
-                                        .foregroundColor(.white)
+                                    HStack(spacing: 6) {
+                                        Text(mode.displayName)
+                                            .font(.system(size: 16, weight: .semibold))
+                                            .foregroundColor(.white)
+
+                                        if !mode.isFree {
+                                            ProBadge()
+                                        }
+                                    }
 
                                     Text(mode.description)
                                         .font(.system(size: 13))
@@ -107,6 +120,9 @@ struct ToneSettingsSheet: View {
                 Button("未夠", role: .cancel) {}
             } message: {
                 Text("粗口模式得18歲以上先用得")
+            }
+            .sheet(isPresented: $showPaywall) {
+                PaywallSheet()
             }
         }
     }
