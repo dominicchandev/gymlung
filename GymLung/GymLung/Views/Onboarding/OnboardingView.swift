@@ -133,8 +133,6 @@ struct OnboardingView: View {
                             }
                         }
                         .frame(height: 6)
-
-                        ToneToggleButton()
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 16)

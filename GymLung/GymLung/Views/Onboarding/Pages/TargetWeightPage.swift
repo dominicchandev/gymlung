@@ -16,6 +16,17 @@ struct TargetWeightPage: View {
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
     private var mode: ToneMode { ToneMode(rawValue: toneModeRaw) ?? .normal }
 
+    private var pickerRange: ClosedRange<Int> {
+        switch goal {
+        case "減脂":
+            return 35...max(35, Int(currentWeight) - 1)
+        case "增肌":
+            return min(150, Int(currentWeight) + 1)...150
+        default:
+            return 35...150
+        }
+    }
+
     private var weightDiff: Double {
         targetWeight - currentWeight
     }
@@ -43,19 +54,7 @@ struct TargetWeightPage: View {
             Spacer().frame(height: 40)
 
             VStack(spacing: 20) {
-                // Target weight display
-                Text(String(format: "%.1f", targetWeight))
-                    .font(.system(size: 56, weight: .bold))
-                    .foregroundColor(Theme.neonGreen)
-                    .contentTransition(.numericText())
-
-                Text("kg")
-                    .font(.system(size: 20))
-                    .foregroundColor(Theme.textSecondary)
-
-                Slider(value: $targetWeight, in: 35...150, step: 0.5)
-                    .tint(Theme.neonGreen)
-                    .padding(.horizontal, 24)
+                WeightWheelPicker(value: $targetWeight, range: pickerRange)
 
                 // Info card
                 VStack(spacing: 12) {
@@ -126,6 +125,23 @@ struct TargetWeightPage: View {
             .padding(.horizontal, 24)
 
             Spacer().frame(height: 40)
+        }
+        .onAppear {
+            // Clamp target weight to valid range when page appears
+            // (e.g. user went back, changed goal, and returned)
+            let range = pickerRange
+            let minVal = Double(range.lowerBound)
+            let maxVal = Double(range.upperBound) + 0.9
+            if targetWeight < minVal || targetWeight > maxVal {
+                switch goal {
+                case "減脂":
+                    targetWeight = max(minVal, currentWeight - 5)
+                case "增肌":
+                    targetWeight = min(maxVal, currentWeight + 5)
+                default:
+                    targetWeight = currentWeight
+                }
+            }
         }
     }
 }

@@ -7,13 +7,17 @@
 
 import SwiftUI
 import SwiftData
+import AVFoundation
 
 struct HomePage: View {
     @Environment(\.modelContext) private var modelContext
     @Query private var profiles: [UserProfile]
     @Query(sort: \FoodEntry.createdAt, order: .reverse) private var allEntries: [FoodEntry]
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
+    @State private var showAddFoodChoice = false
     @State private var showAddFood = false
+    @State private var showCamera = false
+    @State private var capturedImage: UIImage?
     @State private var selectedDate = Date()
     @State private var selectedEntry: FoodEntry?
     @State private var showStreakCelebration = false
@@ -27,20 +31,29 @@ struct HomePage: View {
 
     private var currentStreak: Int { profile?.currentStreak ?? 0 }
 
-    // MARK: - All Dates (from account creation to today)
+    // MARK: - All Dates (chronological, oldest → today, min 7)
+
+    private var startDate: Date {
+        Calendar.current.startOfDay(for: profile?.createdAt ?? Date())
+    }
 
     private var allDates: [Date] {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
-        let start = calendar.startOfDay(for: profile?.createdAt ?? today)
+        // Always go back at least 6 days before today to fill 7 slots
+        let earliest = min(startDate, calendar.date(byAdding: .day, value: -6, to: today) ?? today)
         var dates: [Date] = []
-        var current = start
+        var current = earliest
         while current <= today {
             dates.append(current)
             guard let next = calendar.date(byAdding: .day, value: 1, to: current) else { break }
             current = next
         }
         return dates
+    }
+
+    private var canScrollDates: Bool {
+        allDates.count > 7
     }
 
     // MARK: - Filtered Entries
@@ -115,7 +128,9 @@ struct HomePage: View {
 
                     // 6. Add Food Button
                     ActionButton(title: AppStrings.Home.addButton(mode)) {
-                        showAddFood = true
+                        withAnimation(.easeOut(duration: 0.2)) {
+                            showAddFoodChoice = true
+                        }
                     }
                     .padding(.horizontal, 20)
 
@@ -133,6 +148,19 @@ struct HomePage: View {
             }
             .sheet(item: $selectedEntry) { entry in
                 FoodEntryEditSheet(entry: entry)
+            }
+            .fullScreenCover(isPresented: $showCamera) {
+                CameraView { image in
+                    capturedImage = image
+                    // TODO: Send image to OpenAI for nutrition analysis
+                }
+            }
+            .overlay {
+                if showAddFoodChoice {
+                    addFoodChoiceOverlay
+                        .transition(.opacity)
+                        .zIndex(20)
+                }
             }
             .overlay {
                 if showStreakCelebration {
@@ -241,7 +269,8 @@ struct HomePage: View {
                         let dayNumber = calendar.component(.day, from: date)
                         let isSelected = calendar.isDate(date, inSameDayAs: selectedDate)
                         let isToday = calendar.isDateInToday(date)
-                        let hasEntries = allEntries.contains { calendar.isDate($0.date, inSameDayAs: date) }
+                        let isBeforeStart = date < startDate
+                        let hasEntries = !isBeforeStart && allEntries.contains { calendar.isDate($0.date, inSameDayAs: date) }
 
                         Button {
                             withAnimation(.easeInOut(duration: 0.2)) {
@@ -251,7 +280,7 @@ struct HomePage: View {
                             VStack(spacing: 6) {
                                 Text(daySymbols[weekdayIndex])
                                     .font(.system(size: 12))
-                                    .foregroundColor(isSelected ? .white : Theme.textTertiary)
+                                    .foregroundColor(isBeforeStart ? Theme.textMuted : (isSelected ? .white : Theme.textTertiary))
 
                                 ZStack {
                                     if isSelected {
@@ -262,7 +291,10 @@ struct HomePage: View {
 
                                     Text("\(dayNumber)")
                                         .font(.system(size: 15, weight: isSelected ? .bold : .medium))
-                                        .foregroundColor(isSelected ? Theme.bg : (isToday ? Theme.neonGreen : .white))
+                                        .foregroundColor(
+                                            isBeforeStart ? Theme.textMuted :
+                                            (isSelected ? Theme.bg : (isToday ? Theme.neonGreen : .white))
+                                        )
                                 }
                                 .frame(height: 32)
 
@@ -270,15 +302,17 @@ struct HomePage: View {
                                     .fill(hasEntries ? Theme.neonGreen : Color.clear)
                                     .frame(width: 5, height: 5)
                             }
-                            .frame(width: 48)
+                            .frame(width: (UIScreen.main.bounds.width - 40 - 16) / 7)
                             .padding(.vertical, 10)
                         }
                         .buttonStyle(.plain)
+                        .disabled(isBeforeStart)
                         .id(isToday ? todayID : "\(date.timeIntervalSince1970)")
                     }
                 }
                 .padding(.horizontal, 8)
             }
+            .scrollDisabled(!canScrollDates)
             .background(
                 RoundedRectangle(cornerRadius: 12)
                     .fill(Theme.bgCard)
@@ -431,6 +465,99 @@ struct HomePage: View {
     private func deleteEntry(_ entry: FoodEntry) {
         withAnimation {
             modelContext.delete(entry)
+        }
+    }
+
+    // MARK: - Add Food Choice Overlay
+
+    private var addFoodChoiceOverlay: some View {
+        ZStack {
+            // Dimmed background with subtle blur
+            Color.black.opacity(0.45)
+                .ignoresSafeArea()
+                .background(.thinMaterial.opacity(0.3))
+                .onTapGesture {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        showAddFoodChoice = false
+                    }
+                }
+
+            // Choice cards
+            HStack(spacing: 16) {
+                // Search card
+                addFoodOptionCard(
+                    icon: "magnifyingglass",
+                    label: "搜尋"
+                ) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        showAddFoodChoice = false
+                    }
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                        showAddFood = true
+                    }
+                }
+
+                // Scan card
+                addFoodOptionCard(
+                    icon: "camera.fill",
+                    label: "掃描"
+                ) {
+                    withAnimation(.easeOut(duration: 0.2)) {
+                        showAddFoodChoice = false
+                    }
+                    requestCameraAndOpen()
+                }
+            }
+            .padding(.horizontal, 40)
+        }
+    }
+
+    private func addFoodOptionCard(icon: String, label: String, action: @escaping () -> Void) -> some View {
+        Button(action: action) {
+            VStack(spacing: 14) {
+                Image(systemName: icon)
+                    .font(.system(size: 32, weight: .medium))
+                    .foregroundColor(Theme.neonGreen)
+
+                Text(label)
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.white)
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 130)
+            .background(
+                RoundedRectangle(cornerRadius: 20)
+                    .fill(Theme.bgCard)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20)
+                            .stroke(Theme.border, lineWidth: 1)
+                    )
+            )
+        }
+        .buttonStyle(.plain)
+    }
+
+    private func requestCameraAndOpen() {
+        switch AVCaptureDevice.authorizationStatus(for: .video) {
+        case .authorized:
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                showCamera = true
+            }
+        case .notDetermined:
+            AVCaptureDevice.requestAccess(for: .video) { granted in
+                if granted {
+                    DispatchQueue.main.async {
+                        showCamera = true
+                    }
+                }
+            }
+        case .denied, .restricted:
+            // Open Settings so user can grant permission
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url)
+            }
+        @unknown default:
+            break
         }
     }
 

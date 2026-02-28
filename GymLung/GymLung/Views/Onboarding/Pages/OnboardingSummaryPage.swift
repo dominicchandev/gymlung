@@ -28,7 +28,7 @@ struct OnboardingSummaryPage: View {
                         .foregroundColor(.white)
                         .multilineTextAlignment(.center)
 
-                    Text(AppStrings.Summary.description(states.name, mode))
+                    Text(AppStrings.Summary.description(states.name, states.goal, mode))
                         .font(.system(size: 15))
                         .foregroundColor(Theme.textSecondary)
                         .multilineTextAlignment(.center)
@@ -37,7 +37,7 @@ struct OnboardingSummaryPage: View {
 
                 // Calorie target card
                 VStack(spacing: 16) {
-                    Text(AppStrings.Summary.calorieLabel(mode))
+                    Text(AppStrings.Summary.calorieLabel(states.goal, mode))
                         .font(.system(size: 14))
                         .foregroundColor(Theme.textSecondary)
 

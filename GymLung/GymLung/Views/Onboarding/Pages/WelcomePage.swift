@@ -19,13 +19,6 @@ struct WelcomePage: View {
 
     var body: some View {
         VStack(spacing: 0) {
-            HStack {
-                Spacer()
-                ToneToggleButton()
-            }
-            .padding(.horizontal, 20)
-            .padding(.top, 12)
-
             Spacer()
 
             VStack(spacing: 20) {

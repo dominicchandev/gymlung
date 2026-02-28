@@ -43,9 +43,6 @@ struct PaywallPage: View {
                     }
                     Spacer()
 
-                    ToneToggleButton()
-                        .padding(.trailing, 8)
-
                     // Restore button top-right
                     Button(action: {
                         Task {

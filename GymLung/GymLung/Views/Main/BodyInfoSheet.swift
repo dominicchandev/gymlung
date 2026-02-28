@@ -82,14 +82,8 @@ struct BodyInfoSheet: View {
 
                         // Weight
                         sectionLabel("體重")
-                        VStack(spacing: 8) {
-                            Text(String(format: "%.1f kg", weightKG))
-                                .font(.system(size: 28, weight: .bold))
-                                .foregroundColor(.white)
-                            Slider(value: $weightKG, in: 35...150, step: 0.5)
-                                .tint(Theme.neonGreen)
-                        }
-                        .padding(.horizontal, 20)
+                        WeightWheelPicker(value: $weightKG)
+                            .padding(.horizontal, 20)
 
                         // Goal
                         sectionLabel("目標")
@@ -109,13 +103,14 @@ struct BodyInfoSheet: View {
                         // Target weight (if not maintaining)
                         if goal != "維持體重" {
                             sectionLabel("目標體重")
-                            VStack(spacing: 8) {
-                                Text(String(format: "%.1f kg", targetWeightKG))
-                                    .font(.system(size: 28, weight: .bold))
-                                    .foregroundColor(.white)
-                                Slider(value: $targetWeightKG, in: 35...150, step: 0.5)
-                                    .tint(Theme.neonGreen)
-                            }
+                            WeightWheelPicker(
+                                value: $targetWeightKG,
+                                range: goal == "減脂"
+                                    ? 35...max(35, Int(weightKG) - 1)
+                                    : goal == "增肌"
+                                        ? min(150, Int(weightKG) + 1)...150
+                                        : 35...150
+                            )
                             .padding(.horizontal, 20)
                         }
 

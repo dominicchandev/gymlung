@@ -60,29 +60,12 @@ struct HeightWeightPage: View {
                 .padding(.horizontal, 24)
 
                 // Weight
-                VStack(spacing: 12) {
-                    HStack {
-                        Text("體重")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundColor(.white)
-                        Spacer()
-                        Text(String(format: "%.1f kg", weightKG))
-                            .font(.system(size: 18, weight: .bold))
-                            .foregroundColor(Theme.neonGreen)
-                    }
+                VStack(spacing: 8) {
+                    Text("體重")
+                        .font(.system(size: 16, weight: .semibold))
+                        .foregroundColor(.white)
 
-                    Slider(value: $weightKG, in: 35...150, step: 0.5)
-                        .tint(Theme.neonGreen)
-
-                    HStack {
-                        Text("35 kg")
-                            .font(.system(size: 12))
-                            .foregroundColor(Theme.textTertiary)
-                        Spacer()
-                        Text("150 kg")
-                            .font(.system(size: 12))
-                            .foregroundColor(Theme.textTertiary)
-                    }
+                    WeightWheelPicker(value: $weightKG)
                 }
                 .padding(.horizontal, 24)
 

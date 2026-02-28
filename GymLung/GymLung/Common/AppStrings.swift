@@ -70,7 +70,7 @@ enum AppStrings {
         }
         static func namePlaceholder(_ m: ToneMode) -> String {
             switch m {
-            case .normal: return "打嚟啦"
+            case .normal: return "打啦"
             case .adult: return "快啲打啦屌"
             case .gentle: return "打你個靚名出嚟～"
             }
@@ -260,8 +260,8 @@ enum AppStrings {
         }
         static func targetLabel(_ m: ToneMode) -> String {
             switch m {
-            case .normal: return "發夢"
-            case .adult: return "發夢"
+            case .normal: return "理想"
+            case .adult: return "理想"
             case .gentle: return "未來嘅你 💫"
             }
         }
@@ -427,18 +427,34 @@ enum AppStrings {
             case .gentle: return "你嘅專屬計劃準備好喇！✨"
             }
         }
-        static func description(_ name: String, _ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "\(name)，以你嘅身材 你每日最多食咁多"
-            case .adult: return "\(name)，你每日只可以食咁撚多"
-            case .gentle: return "\(name)，以下係為你度身訂造嘅計劃 💕"
+        static func description(_ name: String, _ goal: String, _ m: ToneMode) -> String {
+            if goal == "增肌" {
+                switch m {
+                case .normal: return "\(name)，想大隻就要食夠咁多"
+                case .adult: return "\(name)，想大隻就食撚夠佢"
+                case .gentle: return "\(name)，以下係為你度身訂造嘅計劃 💕"
+                }
+            } else {
+                switch m {
+                case .normal: return "\(name)，以你嘅身材 你每日最多食咁多"
+                case .adult: return "\(name)，你每日只可以食咁撚多"
+                case .gentle: return "\(name)，以下係為你度身訂造嘅計劃 💕"
+                }
             }
         }
-        static func calorieLabel(_ m: ToneMode) -> String {
-            switch m {
-            case .normal: return "你嘅上限（唔好超）"
-            case .adult: return "每日上限"
-            case .gentle: return "每日建議攝取量"
+        static func calorieLabel(_ goal: String, _ m: ToneMode) -> String {
+            if goal == "增肌" {
+                switch m {
+                case .normal: return "你嘅目標（食夠佢）"
+                case .adult: return "每日目標 食唔夠你走"
+                case .gentle: return "每日建議攝取量"
+                }
+            } else {
+                switch m {
+                case .normal: return "你嘅上限（唔好超）"
+                case .adult: return "每日上限"
+                case .gentle: return "每日建議攝取量"
+                }
             }
         }
         static func macroHeader(_ m: ToneMode) -> String {
@@ -843,8 +859,8 @@ enum AppStrings {
         }
         static func goalWeight(_ m: ToneMode) -> String {
             switch m {
-            case .normal: return "發夢"
-            case .adult: return "發夢"
+            case .normal: return "目標"
+            case .adult: return "目標"
             case .gentle: return "目標 💫"
             }
         }

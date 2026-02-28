@@ -24,11 +24,13 @@ struct ScannedFoodItem: Decodable, Identifiable {
 struct FoodScanResult: Decodable {
     let food_items: [ScannedFoodItem]
     let total_calories: Int
+    let roast_comment: String
 }
 
 struct ScanFoodRequest: Encodable {
     let image_base64: String
     let meal_type: String?
+    let tone_mode: String?
 }
 
 @MainActor
@@ -38,7 +40,7 @@ class FoodScannerManager {
     var scanResult: FoodScanResult?
     var errorMessage: String?
 
-    func scanFood(imageData: Data, mealType: String? = nil) async {
+    func scanFood(imageData: Data, mealType: String? = nil, toneMode: ToneMode = .normal) async {
         isScanning = true
         errorMessage = nil
         scanResult = nil
@@ -49,7 +51,7 @@ class FoodScannerManager {
             let base64String = compressedData.base64EncodedString()
 
             // Call Supabase Edge Function — SDK auto-decodes the response
-            let request = ScanFoodRequest(image_base64: base64String, meal_type: mealType)
+            let request = ScanFoodRequest(image_base64: base64String, meal_type: mealType, tone_mode: toneMode.rawValue)
             let result: FoodScanResult = try await SupabaseConfig.client.functions.invoke(
                 "scan-food",
                 options: FunctionInvokeOptions(body: request)

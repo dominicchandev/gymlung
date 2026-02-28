@@ -16,6 +16,7 @@ struct ProfilePage: View {
     @Environment(DataSyncManager.self) var dataSyncManager
     @Query private var profiles: [UserProfile]
     @Query(sort: \FoodEntry.createdAt, order: .reverse) private var allEntries: [FoodEntry]
+    @Query private var weightEntries: [WeightEntry]
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
     @AppStorage("colorTheme") private var colorThemeRaw: String = ColorTheme.amber.rawValue
     @AppStorage("lastStreakCelebrationDay") private var lastStreakCelebrationDay: Int = 0
@@ -236,6 +237,9 @@ struct ProfilePage: View {
         }
         for entry in allEntries {
             modelContext.delete(entry)
+        }
+        for weight in weightEntries {
+            modelContext.delete(weight)
         }
         lastStreakCelebrationDay = 0
     }

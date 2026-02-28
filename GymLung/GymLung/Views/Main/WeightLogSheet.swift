@@ -33,18 +33,10 @@ struct WeightLogSheet: View {
             ZStack {
                 Theme.bg.ignoresSafeArea()
 
-                VStack(spacing: 32) {
+                VStack(spacing: 24) {
                     Spacer()
 
-                    // Large weight display
-                    HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(String(format: "%.1f", weightKG))
-                            .font(.system(size: 56, weight: .bold).monospacedDigit())
-                            .foregroundColor(.white)
-                        Text("kg")
-                            .font(.system(size: 22, weight: .medium))
-                            .foregroundColor(Theme.textSecondary)
-                    }
+                    WeightWheelPicker(value: $weightKG)
 
                     // Diff display
                     if let diff, abs(diff) > 0.01 {
@@ -62,24 +54,6 @@ struct WeightLogSheet: View {
                             }
                             .foregroundColor(isLoss ? Theme.neonGreen : Theme.neonRed)
                         }
-                    }
-
-                    // Slider
-                    VStack(spacing: 8) {
-                        Slider(value: $weightKG, in: 35...150, step: 0.1)
-                            .tint(Theme.neonGreen)
-                            .padding(.horizontal, 20)
-
-                        HStack {
-                            Text("35 kg")
-                                .font(.system(size: 11))
-                                .foregroundColor(Theme.textTertiary)
-                            Spacer()
-                            Text("150 kg")
-                                .font(.system(size: 11))
-                                .foregroundColor(Theme.textTertiary)
-                        }
-                        .padding(.horizontal, 20)
                     }
 
                     Spacer()
@@ -148,6 +122,10 @@ struct WeightLogSheet: View {
     }
 
     private func saveWeight() {
+        // Capture diff BEFORE modifying data (computed property reads live SwiftData)
+        let previousWeight = lastEntry?.weightKG
+        let d: Double? = previousWeight.map { weightKG - $0 }
+
         // One entry per day: update existing or insert new
         let today = Calendar.current.startOfDay(for: Date())
         if let existing = weightEntries.last(where: { Calendar.current.isDate($0.date, inSameDayAs: today) }) {
@@ -162,16 +140,14 @@ struct WeightLogSheet: View {
             profile.weightKG = weightKG
         }
 
-        // Show goal-aware roast
+        // Show goal-aware roast using captured diff
         let goal = profile?.goal ?? "維持體重"
         let roast: String
-        if let d = diff {
-            if d < -0.01 {
+        if let d, abs(d) > 0.01 {
+            if d < 0 {
                 roast = AppStrings.Progress.weightLost(abs(d), goal: goal, mode)
-            } else if d > 0.01 {
-                roast = AppStrings.Progress.weightGained(d, goal: goal, mode)
             } else {
-                roast = AppStrings.Progress.weightSame(goal: goal, mode)
+                roast = AppStrings.Progress.weightGained(d, goal: goal, mode)
             }
         } else {
             roast = AppStrings.Progress.weightSame(goal: goal, mode)
