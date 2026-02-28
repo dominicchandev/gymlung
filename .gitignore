@@ -39,3 +39,8 @@ supabase/.branches/
 
 # VS Code (optional — remove if you want to share settings)
 # .vscode/
+
+# Next.js / web
+web/node_modules/
+web/.next/
+web/.vercel/
