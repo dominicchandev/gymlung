@@ -1,28 +1,19 @@
 //
-//  ToneSettingsSheet.swift
+//  RegionPickerSheet.swift
 //  GymLung
 //
-//  Created by Chan Tin Lok on 26/2/2026.
+//  Created by Chan Tin Lok on 28/2/2026.
 //
 
 import SwiftUI
 
-struct ToneSettingsSheet: View {
-    @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
-    @AppStorage("region") private var regionRaw: String = Region.deviceDefault.rawValue
+struct RegionPickerSheet: View {
+    @Binding var regionRaw: String
+    @Binding var toneModeRaw: String
     @Environment(\.dismiss) private var dismiss
-    @State private var showAgeConfirm = false
-
-    private var currentMode: ToneMode {
-        ToneMode(rawValue: toneModeRaw) ?? .normal
-    }
 
     private var currentRegion: Region {
         Region(rawValue: regionRaw) ?? .hk
-    }
-
-    private var availableModes: [ToneMode] {
-        ToneMode.modes(for: currentRegion)
     }
 
     var body: some View {
@@ -31,39 +22,32 @@ struct ToneSettingsSheet: View {
                 Theme.bg.ignoresSafeArea()
 
                 VStack(spacing: 20) {
-                    Text("語氣模式")
+                    Text("地區")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
                         .padding(.top, 8)
 
-                    ForEach(availableModes, id: \.rawValue) { mode in
+                    ForEach(Region.allCases, id: \.rawValue) { region in
                         Button(action: {
-                            if mode == .adult && currentMode != .adult {
-                                showAgeConfirm = true
-                            } else {
-                                toneModeRaw = mode.rawValue
-                            }
+                            switchRegion(to: region)
                         }) {
                             HStack(spacing: 16) {
+                                Text(region.flag)
+                                    .font(.system(size: 28))
+
                                 VStack(alignment: .leading, spacing: 4) {
-                                    Text(mode.displayName)
+                                    Text(region.displayName)
                                         .font(.system(size: 16, weight: .semibold))
                                         .foregroundColor(.white)
 
-                                    Text(mode.description)
+                                    Text(regionDescription(region))
                                         .font(.system(size: 13))
                                         .foregroundColor(Theme.textSecondary)
-
-                                    Text(previewText(for: mode))
-                                        .font(.system(size: 13))
-                                        .foregroundColor(Theme.textTertiary)
-                                        .italic()
-                                        .padding(.top, 2)
                                 }
 
                                 Spacer()
 
-                                if currentMode == mode {
+                                if currentRegion == region {
                                     Image(systemName: "checkmark.circle.fill")
                                         .font(.system(size: 22))
                                         .foregroundColor(Theme.neonGreen)
@@ -76,7 +60,7 @@ struct ToneSettingsSheet: View {
                                     .overlay(
                                         RoundedRectangle(cornerRadius: 12)
                                             .stroke(
-                                                currentMode == mode ? Theme.neonGreen : Color.clear,
+                                                currentRegion == region ? Theme.neonGreen : Color.clear,
                                                 lineWidth: 1.5
                                             )
                                     )
@@ -94,33 +78,26 @@ struct ToneSettingsSheet: View {
             .toolbarColorScheme(.dark, for: .navigationBar)
             .toolbar {
                 ToolbarItem(placement: .cancellationAction) {
-                    Button(currentRegion == .tw ? "OK" : "搞掂") {
+                    Button("OK") {
                         dismiss()
                     }
                     .foregroundColor(Theme.neonGreen)
                 }
             }
-            .alert("你夠18歲未？", isPresented: $showAgeConfirm) {
-                Button("夠喇", role: .none) {
-                    toneModeRaw = ToneMode.adult.rawValue
-                }
-                Button("未夠", role: .cancel) {}
-            } message: {
-                Text("粗口模式得18歲以上先用得")
-            }
         }
     }
 
-    private func previewText(for mode: ToneMode) -> String {
-        switch mode {
-        // HK
-        case .normal: return "「又食嘢？記低佢」"
-        case .adult: return "「又食嘢？記低佢啦屌」"
-        case .gentle: return "「記錄食物 🍽️」"
-        // TW
-        case .twGanHua: return "「根據統計，吃完這包的人100%都會胖」"
-        case .twAma: return "「又吃炸的喔？你媽知道嗎？」"
-        case .twYanShi: return "「...又是珍奶。算了，你開心就好」"
+    private func regionDescription(_ region: Region) -> String {
+        switch region {
+        case .hk: return "廣東話語氣模式"
+        case .tw: return "台灣中文語氣模式"
         }
+    }
+
+    private func switchRegion(to region: Region) {
+        guard region != currentRegion else { return }
+        regionRaw = region.rawValue
+        // Auto-switch tone to default for the new region
+        toneModeRaw = ToneMode.defaultMode(for: region).rawValue
     }
 }

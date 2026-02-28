@@ -601,6 +601,9 @@ struct HomePage: View {
         case .normal: return "冇記錄 唔代表你冇食 👀"
         case .adult: return "冇記錄 唔代表你冇食 👀"
         case .gentle: return "仲未有記錄，食完記得記低呀～"
+        case .twGanHua: return "沒有紀錄不代表你沒吃，自欺欺人是吧 👀"
+        case .twAma: return "還沒吃東西嗎？不要餓肚子喔～"
+        case .twYanShi: return "...空的，跟人生一樣"
         }
     }
 }

@@ -19,6 +19,7 @@ struct ProfilePage: View {
     @Query private var weightEntries: [WeightEntry]
     @AppStorage("toneMode") private var toneModeRaw: String = ToneMode.normal.rawValue
     @AppStorage("colorTheme") private var colorThemeRaw: String = ColorTheme.amber.rawValue
+    @AppStorage("region") private var regionRaw: String = Region.deviceDefault.rawValue
     @AppStorage("lastStreakCelebrationDay") private var lastStreakCelebrationDay: Int = 0
     @State private var showToneSettings = false
     @State private var showThemePicker = false
@@ -28,9 +29,11 @@ struct ProfilePage: View {
     @State private var showDeleteAlert = false
     @State private var showNotificationDeniedAlert = false
     @State private var showNameEdit = false
+    @State private var showRegionPicker = false
     @State private var editingName: String = ""
 
     private var mode: ToneMode { ToneMode(rawValue: toneModeRaw) ?? .normal }
+    private var currentRegion: Region { Region(rawValue: regionRaw) ?? .hk }
 
     private var profile: UserProfile? { profiles.first }
 
@@ -61,6 +64,15 @@ struct ProfilePage: View {
                     SectionHeader(title: AppStrings.Profile.settingsSection(mode))
 
                     GroupedCard {
+                        SettingsRow(
+                            icon: "globe.asia.australia",
+                            title: "地區",
+                            subtitle: "\(currentRegion.flag) \(currentRegion.displayName)",
+                            action: { showRegionPicker = true }
+                        )
+
+                        SettingsDivider()
+
                         SettingsRow(
                             icon: "face.smiling",
                             title: AppStrings.Profile.toneLabel(mode),
@@ -130,6 +142,9 @@ struct ProfilePage: View {
             .navigationTitle(AppStrings.Profile.navTitle(mode))
             .navigationBarTitleDisplayMode(.inline)
             .toolbarColorScheme(.dark, for: .navigationBar)
+            .sheet(isPresented: $showRegionPicker) {
+                RegionPickerSheet(regionRaw: $regionRaw, toneModeRaw: $toneModeRaw)
+            }
             .sheet(isPresented: $showToneSettings) {
                 ToneSettingsSheet()
             }
