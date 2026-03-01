@@ -1,4 +1,4 @@
-# GymLung Design System
+# CaLoMei Design System
 ## UI/UX Specification for Hong Kong People
 
 ---

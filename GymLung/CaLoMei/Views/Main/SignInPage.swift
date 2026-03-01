@@ -38,7 +38,7 @@ struct SignInPage: View {
                     .offset(y: showContent ? 0 : 20)
 
                     VStack(spacing: 8) {
-                        Text("GymLung")
+                        Text("CaLoMei")
                             .font(.system(size: 36, weight: .bold))
                             .foregroundColor(.white)
 

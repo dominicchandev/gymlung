@@ -275,7 +275,7 @@ struct HomePage: View {
                 .scaledToFit()
                 .foregroundColor(Theme.neonGreen)
                 .frame(width: 28, height: 28)
-            Text("GymLung")
+            Text("CaLoMei")
                 .font(.system(size: 22, weight: .bold))
                 .foregroundColor(.white)
 

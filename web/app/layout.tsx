@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "GymLung — 你食咗啲乜",
+  title: "CaLoMei — 你食咗啲乜",
   description:
     "The Hong Kong food tracking app that roasts you for eating trash food.",
 };

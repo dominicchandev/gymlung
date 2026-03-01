@@ -19,7 +19,7 @@ export default function Home() {
           marginBottom: "0.5rem",
         }}
       >
-        GymLung
+        CaLoMei
       </h1>
 
       <p

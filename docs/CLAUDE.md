@@ -1,10 +1,10 @@
-# GymLung Project Guidelines
+# CaLoMei Project Guidelines
 
 ## Project Overview
-GymLung is a calorie tracker app designed for Hong Kong people. The app's personality is 寸嘴 (sharp-tongued) and 毒舌 (venomous) — it roasts users for eating trash food. Marketing strategy: "This app diu me when I eat trash food".
+CaLoMei is a calorie tracker app designed for Hong Kong people. The app's personality is 寸嘴 (sharp-tongued) and 毒舌 (venomous) — it roasts users for eating trash food. Marketing strategy: "This app diu me when I eat trash food".
 
 ## Project Structure
-- `GymLung/` — iOS app (Swift, SwiftUI, SwiftData)
+- `CaLoMei/` — iOS app (Swift, SwiftUI, SwiftData)
   - `Root/` — App coordinator and navigation
   - `Views/` — All UI views organized by feature
     - `Onboarding/` — Onboarding flow and question pages

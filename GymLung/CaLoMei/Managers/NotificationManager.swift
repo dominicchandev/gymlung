@@ -42,7 +42,7 @@ class NotificationManager {
         center.removePendingNotificationRequests(withIdentifiers: ["trial_ending_reminder"])
 
         let content = UNMutableNotificationContent()
-        content.title = "GymLung"
+        content.title = "CaLoMei"
         content.sound = .default
 
         let regionRaw = UserDefaults.standard.string(forKey: "region") ?? Region.hk.rawValue
@@ -77,34 +77,34 @@ class NotificationManager {
 
         switch (id, mode) {
         case ("breakfast", .normal):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "起身喇 記得食早餐同記低佢"
         case ("breakfast", .adult):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "起身喇 食完早餐記得認罪"
         case ("breakfast", .gentle):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "早安～記得食早餐呀 🌅"
         case ("lunch", .normal):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "lunch喇 食完記得記低"
         case ("lunch", .adult):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "lunch喇 食完記得認罪 屌"
         case ("lunch", .gentle):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "中午喇～食飯時間到 🍽️"
         case ("dinner", .normal):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "晚飯時間 又有咩罪行"
         case ("dinner", .adult):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "晚飯喇 食完記得認罪"
         case ("dinner", .gentle):
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "晚飯時間到～記得食嘢呀 🌙"
         default:
-            content.title = "GymLung"
+            content.title = "CaLoMei"
             content.body = "記得記低你食咗咩"
         }
 

@@ -33,7 +33,7 @@ struct WelcomePage: View {
                 .offset(y: showContent ? 0 : 20)
 
                 VStack(spacing: 8) {
-                    Text("GymLung")
+                    Text("CaLoMei")
                         .font(.system(size: 28, weight: .bold))
                         .foregroundColor(.white)
 

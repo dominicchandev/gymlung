@@ -34,7 +34,7 @@ export default function PrivacyPolicy() {
       </p>
 
       <Section title="Overview">
-        GymLung (&quot;we&quot;, &quot;our&quot;, or &quot;the app&quot;) is a
+        CaLoMei (&quot;we&quot;, &quot;our&quot;, or &quot;the app&quot;) is a
         food tracking application. We are committed to protecting your privacy.
         This policy explains what data we collect and how we use it.
       </Section>
@@ -96,7 +96,7 @@ export default function PrivacyPolicy() {
       </Section>
 
       <Section title="Children&apos;s Privacy">
-        GymLung is not intended for children under 13. We do not knowingly
+        CaLoMei is not intended for children under 13. We do not knowingly
         collect data from children under 13.
       </Section>
 

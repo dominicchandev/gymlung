@@ -186,8 +186,8 @@ After the first 14 days, feedback switches to milestone-only. The tone arc: grud
 
 | Mode | Title | Body |
 |------|-------|------|
-| Normal | 一年 我冇嘢好講 | 你贏咗 我認輸 你係真正嘅GymLung |
-| Adult | 一年 我冇嘢好講 | 你贏咗 我認輸 你係真正嘅GymLung 仆街你真係癲 |
+| Normal | 一年 我冇嘢好講 | 你贏咗 我認輸 你係真正嘅CaLoMei |
+| Adult | 一年 我冇嘢好講 | 你贏咗 我認輸 你係真正嘅CaLoMei 仆街你真係癲 |
 | Gentle | 一年！！！我喊到暈咗 😭😭😭😭😭 | 我...我講唔到嘢...你係全宇宙最叻最勁最偉大嘅人 我要幫你申請諾貝爾獎 🥺🏆✨💕🎉 |
 
 ---
