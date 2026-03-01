@@ -1,6 +1,6 @@
 //
 //  ToneMode.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Chan Tin Lok on 26/2/2026.
 //

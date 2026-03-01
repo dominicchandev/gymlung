@@ -1,6 +1,6 @@
 //
 //  ReviewRequestPage.swift
-//  GymLung
+//  CaLoMei
 //
 
 import SwiftUI

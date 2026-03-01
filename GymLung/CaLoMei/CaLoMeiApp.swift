@@ -1,6 +1,6 @@
 //
-//  GymLungApp.swift
-//  GymLung
+//  CaLoMeiApp.swift
+//  CaLoMei
 //
 //  Created by Chan Tin Lok on 25/2/2026.
 //
@@ -10,7 +10,7 @@ import SwiftData
 import RevenueCat
 
 @main
-struct GymLungApp: App {
+struct CaLoMeiApp: App {
     @State private var appStateManager = AppStateManager()
     @State private var authManager = AuthManager()
     @State private var dataSyncManager = DataSyncManager()
@@ -30,7 +30,7 @@ struct GymLungApp: App {
         do {
             return try ModelContainer(
                 for: schema,
-                migrationPlan: GymLungMigrationPlan.self,
+                migrationPlan: CaLoMeiMigrationPlan.self,
                 configurations: [modelConfiguration]
             )
         } catch {

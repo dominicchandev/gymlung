@@ -1,6 +1,6 @@
 //
 //  WeightWheelPicker.swift
-//  GymLung
+//  CaLoMei
 //
 
 import SwiftUI

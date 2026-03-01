@@ -1,6 +1,6 @@
 //
 //  LogManager.swift
-//  GymLung
+//  CaLoMei
 //
 //  Manages application logs for the Dev Panel.
 //

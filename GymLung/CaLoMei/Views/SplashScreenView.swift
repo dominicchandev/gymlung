@@ -1,6 +1,6 @@
 //
 //  SplashScreenView.swift
-//  GymLung
+//  CaLoMei
 //
 
 import SwiftUI

@@ -1,6 +1,6 @@
 //
 //  Theme.swift
-//  GymLung
+//  CaLoMei
 //
 //  Design system: dynamic color themes
 //

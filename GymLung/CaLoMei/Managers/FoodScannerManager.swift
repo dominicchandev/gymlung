@@ -1,6 +1,6 @@
 //
 //  FoodScannerManager.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Claude on 26/2/2026.
 //

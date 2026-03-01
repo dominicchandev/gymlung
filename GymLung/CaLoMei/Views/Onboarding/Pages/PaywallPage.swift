@@ -1,6 +1,6 @@
 //
 //  PaywallPage.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Chan Tin Lok on 27/2/2026.
 //
@@ -209,7 +209,7 @@ struct PaywallPage: View {
                                 .foregroundColor(Theme.textSecondary.opacity(0.3))
 
                             Link("私隱政策",
-                                 destination: URL(string: "https://gymlung.vercel.app/privacy-policy")!)
+                                 destination: URL(string: "https://calomei.vercel.app/privacy-policy")!)
                                 .font(.system(size: 11))
                                 .foregroundColor(Theme.textSecondary.opacity(0.5))
                         }

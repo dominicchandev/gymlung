@@ -107,7 +107,7 @@ export default function PrivacyPolicy() {
 
       <Section title="Contact Us">
         If you have questions about this privacy policy, please contact us at{" "}
-        <a href="mailto:support@gymlung.app">support@gymlung.app</a>.
+        <a href="mailto:support@calomei.app">support@calomei.app</a>.
       </Section>
     </main>
   );

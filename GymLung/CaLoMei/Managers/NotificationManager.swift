@@ -1,6 +1,6 @@
 //
 //  NotificationManager.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Chan Tin Lok on 27/2/2026.
 //

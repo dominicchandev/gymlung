@@ -1,6 +1,6 @@
 //
 //  DevPanelView.swift
-//  GymLung
+//  CaLoMei
 //
 //  Development panel for debugging and testing.
 //  Only visible in DEBUG builds.

@@ -1,6 +1,6 @@
 //
 //  ProBadge.swift
-//  GymLung
+//  CaLoMei
 //
 
 import SwiftUI

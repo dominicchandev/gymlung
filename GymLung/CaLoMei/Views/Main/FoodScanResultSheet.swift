@@ -1,6 +1,6 @@
 //
 //  FoodScanResultSheet.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Claude on 28/2/2026.
 //

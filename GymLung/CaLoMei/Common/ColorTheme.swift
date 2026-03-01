@@ -1,6 +1,6 @@
 //
 //  ColorTheme.swift
-//  GymLung
+//  CaLoMei
 //
 
 import Foundation

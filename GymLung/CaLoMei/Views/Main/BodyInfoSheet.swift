@@ -1,6 +1,6 @@
 //
 //  BodyInfoSheet.swift
-//  GymLung
+//  CaLoMei
 //
 
 import SwiftUI

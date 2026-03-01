@@ -1,13 +1,13 @@
 //
-//  GymLungUITestsLaunchTests.swift
-//  GymLungUITests
+//  CaLoMeiUITestsLaunchTests.swift
+//  CaLoMeiUITests
 //
 //  Created by Chan Tin Lok on 25/2/2026.
 //
 
 import XCTest
 
-final class GymLungUITestsLaunchTests: XCTestCase {
+final class CaLoMeiUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true

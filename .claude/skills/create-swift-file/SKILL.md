@@ -1,7 +1,7 @@
 # Create Swift File Skill
 
 ## Description
-Creates a new Swift file in the GymLung Xcode project. Since this project uses `PBXFileSystemSynchronizedRootGroup`, files placed on disk are automatically discovered by Xcode — no manual `project.pbxproj` editing needed.
+Creates a new Swift file in the CaLoMei Xcode project. Since this project uses `PBXFileSystemSynchronizedRootGroup`, files placed on disk are automatically discovered by Xcode — no manual `project.pbxproj` editing needed.
 
 ## Steps
 
@@ -20,12 +20,12 @@ Creates a new Swift file in the GymLung Xcode project. Since this project uses `
 - Use `ls` or `find` to verify no file with the same name exists at the target path.
 
 ### 3. Create the File
-- Use the Write tool to create the file at: `GymLung/GymLung/<subdirectory>/<FileName>.swift`
+- Use the Write tool to create the file at: `CaLoMei/CaLoMei/<subdirectory>/<FileName>.swift`
 - Include the standard file header:
 ```swift
 //
 //  <FileName>.swift
-//  GymLung
+//  CaLoMei
 //
 //  Created by Chan Tin Lok on <date>.
 //

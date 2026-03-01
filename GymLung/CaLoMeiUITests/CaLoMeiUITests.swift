@@ -1,13 +1,13 @@
 //
-//  GymLungUITests.swift
-//  GymLungUITests
+//  CaLoMeiUITests.swift
+//  CaLoMeiUITests
 //
 //  Created by Chan Tin Lok on 25/2/2026.
 //
 
 import XCTest
 
-final class GymLungUITests: XCTestCase {
+final class CaLoMeiUITests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
