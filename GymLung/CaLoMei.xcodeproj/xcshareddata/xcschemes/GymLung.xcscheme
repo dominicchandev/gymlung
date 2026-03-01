@@ -16,9 +16,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B6FEE8692F4F3F2000E04ED1"
-               BuildableName = "GymLung.app"
-               BlueprintName = "GymLung"
-               ReferencedContainer = "container:GymLung.xcodeproj">
+               BuildableName = "CaLoMei.app"
+               BlueprintName = "CaLoMei"
+               ReferencedContainer = "container:CaLoMei.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -36,9 +36,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B6FEE8782F4F3F2200E04ED1"
-               BuildableName = "GymLungTests.xctest"
-               BlueprintName = "GymLungTests"
-               ReferencedContainer = "container:GymLung.xcodeproj">
+               BuildableName = "CaLoMeiTests.xctest"
+               BlueprintName = "CaLoMeiTests"
+               ReferencedContainer = "container:CaLoMei.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -47,9 +47,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "B6FEE8822F4F3F2200E04ED1"
-               BuildableName = "GymLungUITests.xctest"
-               BlueprintName = "GymLungUITests"
-               ReferencedContainer = "container:GymLung.xcodeproj">
+               BuildableName = "CaLoMeiUITests.xctest"
+               BlueprintName = "CaLoMeiUITests"
+               ReferencedContainer = "container:CaLoMei.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -69,9 +69,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B6FEE8692F4F3F2000E04ED1"
-            BuildableName = "GymLung.app"
-            BlueprintName = "GymLung"
-            ReferencedContainer = "container:GymLung.xcodeproj">
+            BuildableName = "CaLoMei.app"
+            BlueprintName = "CaLoMei"
+            ReferencedContainer = "container:CaLoMei.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -86,9 +86,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "B6FEE8692F4F3F2000E04ED1"
-            BuildableName = "GymLung.app"
-            BlueprintName = "GymLung"
-            ReferencedContainer = "container:GymLung.xcodeproj">
+            BuildableName = "CaLoMei.app"
+            BlueprintName = "CaLoMei"
+            ReferencedContainer = "container:CaLoMei.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

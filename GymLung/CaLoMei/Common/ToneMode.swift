@@ -19,7 +19,7 @@ enum ToneMode: String, CaseIterable {
 
     var displayName: String {
         switch self {
-        case .normal: return "串嘴 ☺️"
+        case .normal: return "老味 ☺️"
         case .adult: return "18+ 🤬"
         case .gentle: return "仁慈 🥺"
         case .twGanHua: return "幹話王 🤡"

@@ -32,25 +32,25 @@
 
 /* Begin PBXFileReference section */
 		B6DCA1E32F5330CA00AD8A2F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
-		B6FEE86A2F4F3F2000E04ED1 /* GymLung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymLung.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		B6FEE8792F4F3F2200E04ED1 /* GymLungTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymLungTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		B6FEE8832F4F3F2200E04ED1 /* GymLungUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymLungUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6FEE86A2F4F3F2000E04ED1 /* CaLoMei.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CaLoMei.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6FEE8792F4F3F2200E04ED1 /* CaLoMeiTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CaLoMeiTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		B6FEE8832F4F3F2200E04ED1 /* CaLoMeiUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = CaLoMeiUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
-		B6FEE86C2F4F3F2000E04ED1 /* GymLung */ = {
+		B6FEE86C2F4F3F2000E04ED1 /* CaLoMei */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GymLung;
+			path = CaLoMei;
 			sourceTree = "<group>";
 		};
-		B6FEE87C2F4F3F2200E04ED1 /* GymLungTests */ = {
+		B6FEE87C2F4F3F2200E04ED1 /* CaLoMeiTests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GymLungTests;
+			path = CaLoMeiTests;
 			sourceTree = "<group>";
 		};
-		B6FEE8862F4F3F2200E04ED1 /* GymLungUITests */ = {
+		B6FEE8862F4F3F2200E04ED1 /* CaLoMeiUITests */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = GymLungUITests;
+			path = CaLoMeiUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -95,9 +95,9 @@
 		B6FEE8612F4F3F2000E04ED1 = {
 			isa = PBXGroup;
 			children = (
-				B6FEE86C2F4F3F2000E04ED1 /* GymLung */,
-				B6FEE87C2F4F3F2200E04ED1 /* GymLungTests */,
-				B6FEE8862F4F3F2200E04ED1 /* GymLungUITests */,
+				B6FEE86C2F4F3F2000E04ED1 /* CaLoMei */,
+				B6FEE87C2F4F3F2200E04ED1 /* CaLoMeiTests */,
+				B6FEE8862F4F3F2200E04ED1 /* CaLoMeiUITests */,
 				B6DCA1E22F5330CA00AD8A2F /* Frameworks */,
 				B6FEE86B2F4F3F2000E04ED1 /* Products */,
 			);
@@ -106,9 +106,9 @@
 		B6FEE86B2F4F3F2000E04ED1 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				B6FEE86A2F4F3F2000E04ED1 /* GymLung.app */,
-				B6FEE8792F4F3F2200E04ED1 /* GymLungTests.xctest */,
-				B6FEE8832F4F3F2200E04ED1 /* GymLungUITests.xctest */,
+				B6FEE86A2F4F3F2000E04ED1 /* CaLoMei.app */,
+				B6FEE8792F4F3F2200E04ED1 /* CaLoMeiTests.xctest */,
+				B6FEE8832F4F3F2200E04ED1 /* CaLoMeiUITests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -116,9 +116,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		B6FEE8692F4F3F2000E04ED1 /* GymLung */ = {
+		B6FEE8692F4F3F2000E04ED1 /* CaLoMei */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B6FEE88D2F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLung" */;
+			buildConfigurationList = B6FEE88D2F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMei" */;
 			buildPhases = (
 				B6FEE8662F4F3F2000E04ED1 /* Sources */,
 				B6FEE8672F4F3F2000E04ED1 /* Frameworks */,
@@ -129,9 +129,9 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				B6FEE86C2F4F3F2000E04ED1 /* GymLung */,
+				B6FEE86C2F4F3F2000E04ED1 /* CaLoMei */,
 			);
-			name = GymLung;
+			name = CaLoMei;
 			packageProductDependencies = (
 				A1B2C3D4E5F6A7B8C9D0E1F3 /* Supabase */,
 				B6A68D3E2F50AB9000B887B3 /* ReceiptParser */,
@@ -139,12 +139,12 @@
 				B6A68D422F50AB9000B887B3 /* RevenueCatUI */,
 			);
 			productName = GymLung;
-			productReference = B6FEE86A2F4F3F2000E04ED1 /* GymLung.app */;
+			productReference = B6FEE86A2F4F3F2000E04ED1 /* CaLoMei.app */;
 			productType = "com.apple.product-type.application";
 		};
-		B6FEE8782F4F3F2200E04ED1 /* GymLungTests */ = {
+		B6FEE8782F4F3F2200E04ED1 /* CaLoMeiTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B6FEE8902F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLungTests" */;
+			buildConfigurationList = B6FEE8902F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMeiTests" */;
 			buildPhases = (
 				B6FEE8752F4F3F2200E04ED1 /* Sources */,
 				B6FEE8762F4F3F2200E04ED1 /* Frameworks */,
@@ -156,18 +156,18 @@
 				B6FEE87B2F4F3F2200E04ED1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				B6FEE87C2F4F3F2200E04ED1 /* GymLungTests */,
+				B6FEE87C2F4F3F2200E04ED1 /* CaLoMeiTests */,
 			);
-			name = GymLungTests;
+			name = CaLoMeiTests;
 			packageProductDependencies = (
 			);
 			productName = GymLungTests;
-			productReference = B6FEE8792F4F3F2200E04ED1 /* GymLungTests.xctest */;
+			productReference = B6FEE8792F4F3F2200E04ED1 /* CaLoMeiTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
-		B6FEE8822F4F3F2200E04ED1 /* GymLungUITests */ = {
+		B6FEE8822F4F3F2200E04ED1 /* CaLoMeiUITests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B6FEE8932F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLungUITests" */;
+			buildConfigurationList = B6FEE8932F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMeiUITests" */;
 			buildPhases = (
 				B6FEE87F2F4F3F2200E04ED1 /* Sources */,
 				B6FEE8802F4F3F2200E04ED1 /* Frameworks */,
@@ -179,13 +179,13 @@
 				B6FEE8852F4F3F2200E04ED1 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
-				B6FEE8862F4F3F2200E04ED1 /* GymLungUITests */,
+				B6FEE8862F4F3F2200E04ED1 /* CaLoMeiUITests */,
 			);
-			name = GymLungUITests;
+			name = CaLoMeiUITests;
 			packageProductDependencies = (
 			);
 			productName = GymLungUITests;
-			productReference = B6FEE8832F4F3F2200E04ED1 /* GymLungUITests.xctest */;
+			productReference = B6FEE8832F4F3F2200E04ED1 /* CaLoMeiUITests.xctest */;
 			productType = "com.apple.product-type.bundle.ui-testing";
 		};
 /* End PBXNativeTarget section */
@@ -211,7 +211,7 @@
 					};
 				};
 			};
-			buildConfigurationList = B6FEE8652F4F3F2000E04ED1 /* Build configuration list for PBXProject "GymLung" */;
+			buildConfigurationList = B6FEE8652F4F3F2000E04ED1 /* Build configuration list for PBXProject "CaLoMei" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -229,9 +229,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				B6FEE8692F4F3F2000E04ED1 /* GymLung */,
-				B6FEE8782F4F3F2200E04ED1 /* GymLungTests */,
-				B6FEE8822F4F3F2200E04ED1 /* GymLungUITests */,
+				B6FEE8692F4F3F2000E04ED1 /* CaLoMei */,
+				B6FEE8782F4F3F2200E04ED1 /* CaLoMeiTests */,
+				B6FEE8822F4F3F2200E04ED1 /* CaLoMeiUITests */,
 			);
 		};
 /* End PBXProject section */
@@ -287,12 +287,12 @@
 /* Begin PBXTargetDependency section */
 		B6FEE87B2F4F3F2200E04ED1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B6FEE8692F4F3F2000E04ED1 /* GymLung */;
+			target = B6FEE8692F4F3F2000E04ED1 /* CaLoMei */;
 			targetProxy = B6FEE87A2F4F3F2200E04ED1 /* PBXContainerItemProxy */;
 		};
 		B6FEE8852F4F3F2200E04ED1 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = B6FEE8692F4F3F2000E04ED1 /* GymLung */;
+			target = B6FEE8692F4F3F2000E04ED1 /* CaLoMei */;
 			targetProxy = B6FEE8842F4F3F2200E04ED1 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -430,7 +430,7 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = GymLung;
+				INFOPLIST_KEY_CFBundleDisplayName = CaLoMei;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "GymLung 需要相機權限嚟影食物相，幫你分析營養資料";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -443,7 +443,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLung;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -464,7 +464,7 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = GymLung;
+				INFOPLIST_KEY_CFBundleDisplayName = CaLoMei;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "GymLung 需要相機權限嚟影食物相，幫你分析營養資料";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
@@ -477,7 +477,7 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLung;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMei;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -497,14 +497,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLungTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMeiTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymLung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymLung";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CaLoMei.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CaLoMei";
 			};
 			name = Debug;
 		};
@@ -518,14 +518,14 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLungTests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMeiTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
 				SWIFT_STRICT_CONCURRENCY = complete;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GymLung.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/GymLung";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CaLoMei.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/CaLoMei";
 			};
 			name = Release;
 		};
@@ -537,7 +537,7 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLungUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMeiUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -556,7 +556,7 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				GENERATE_INFOPLIST_FILE = YES;
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.GymLungUITests;
+				PRODUCT_BUNDLE_IDENTIFIER = com.DominicChan.CaLoMeiUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = NO;
 				SWIFT_EMIT_LOC_STRINGS = NO;
@@ -570,7 +570,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		B6FEE8652F4F3F2000E04ED1 /* Build configuration list for PBXProject "GymLung" */ = {
+		B6FEE8652F4F3F2000E04ED1 /* Build configuration list for PBXProject "CaLoMei" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B6FEE88B2F4F3F2200E04ED1 /* Debug */,
@@ -579,7 +579,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B6FEE88D2F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLung" */ = {
+		B6FEE88D2F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMei" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B6FEE88E2F4F3F2200E04ED1 /* Debug */,
@@ -588,7 +588,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B6FEE8902F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLungTests" */ = {
+		B6FEE8902F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMeiTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B6FEE8912F4F3F2200E04ED1 /* Debug */,
@@ -597,7 +597,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B6FEE8932F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "GymLungUITests" */ = {
+		B6FEE8932F4F3F2200E04ED1 /* Build configuration list for PBXNativeTarget "CaLoMeiUITests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				B6FEE8942F4F3F2200E04ED1 /* Debug */,
