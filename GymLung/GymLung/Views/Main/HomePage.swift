@@ -173,7 +173,7 @@ struct HomePage: View {
                 }
             }
             .sheet(isPresented: $showPaywall) {
-                PaywallSheet()
+                PaywallSheet(trigger: .scanLimit(gender: profile?.gender ?? ""))
             }
             .overlay {
                 if showAddFoodChoice {
@@ -228,33 +228,37 @@ struct HomePage: View {
             }
             .overlay {
                 if let roast = roastToast {
-                    VStack {
-                        Spacer()
+                    ZStack {
+                        Color.black.opacity(0.5)
+                            .ignoresSafeArea()
+                            .onTapGesture {
+                                withAnimation { roastToast = nil }
+                            }
 
-                        VStack(spacing: 8) {
+                        VStack(spacing: 12) {
                             Text(mode.roastEmoji)
-                                .font(.system(size: 28))
+                                .font(.system(size: 48))
+
                             Text(roast)
-                                .font(.system(size: 15, weight: .semibold))
-                                .foregroundColor(Theme.neonGreen)
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(mode.roastColor)
                                 .multilineTextAlignment(.center)
-                                .padding(.horizontal, 16)
+                                .padding(.horizontal, 20)
                         }
-                        .padding(20)
+                        .padding(32)
                         .background(
-                            RoundedRectangle(cornerRadius: 16)
+                            RoundedRectangle(cornerRadius: 20)
                                 .fill(Theme.bgCard)
                                 .overlay(
-                                    RoundedRectangle(cornerRadius: 16)
-                                        .stroke(Theme.neonGreen.opacity(0.4), lineWidth: 1)
+                                    RoundedRectangle(cornerRadius: 20)
+                                        .stroke(mode.roastColor.opacity(0.6), lineWidth: 1)
                                 )
                         )
-                        .neonGlow(Theme.neonGreen, radius: 16)
+                        .neonGlow(mode.roastColor, radius: 20)
                         .padding(.horizontal, 40)
-                        .padding(.bottom, 100)
                     }
-                    .transition(.opacity.combined(with: .scale(scale: 0.9)))
-                    .zIndex(10)
+                    .transition(.opacity.combined(with: .scale(scale: 0.85)))
+                    .zIndex(30)
                 }
             }
         }
@@ -580,6 +584,11 @@ struct HomePage: View {
                             .padding(6)
                     }
                 }
+                .overlay(alignment: .bottom) {
+                    if !PurchaseManager.shared.isPro {
+                        dailyScanBadge
+                    }
+                }
 
                 // Upload photo card
                 if PurchaseManager.shared.canScan {
@@ -605,6 +614,9 @@ struct HomePage: View {
                         )
                     }
                     .buttonStyle(.plain)
+                    .overlay(alignment: .bottom) {
+                        dailyScanBadge
+                    }
                     .onChange(of: photoPickerItem) { _, _ in
                         withAnimation(.easeOut(duration: 0.2)) {
                             showAddFoodChoice = false
@@ -625,6 +637,9 @@ struct HomePage: View {
                     .overlay(alignment: .topTrailing) {
                         ProBadge()
                             .padding(6)
+                    }
+                    .overlay(alignment: .bottom) {
+                        dailyScanBadge
                     }
                 }
             }
@@ -655,6 +670,18 @@ struct HomePage: View {
             )
         }
         .buttonStyle(.plain)
+    }
+
+    private var dailyScanBadge: some View {
+        Text("今日 \(PurchaseManager.shared.remainingScans)/\(PurchaseManager.dailyScanLimit)")
+            .font(.system(size: 11, weight: .medium))
+            .foregroundColor(PurchaseManager.shared.remainingScans > 0 ? Theme.textSecondary : Theme.neonRed)
+            .padding(.horizontal, 8)
+            .padding(.vertical, 3)
+            .background(
+                Capsule().fill(Theme.bg.opacity(0.85))
+            )
+            .padding(.bottom, 8)
     }
 
     private func requestCameraAndOpen() {
@@ -719,6 +746,9 @@ struct HomePage: View {
     private func handleCapturedImage(_ image: UIImage) {
         guard let jpegData = image.jpegData(compressionQuality: 0.7) else { return }
 
+        // Capture count before inserting so checkStreakAfterFoodLog sees the increase
+        previousEntryCount = allEntries.count
+
         let entry = FoodEntry(
             name: "掃描中...",
             calories: 0,
@@ -727,7 +757,6 @@ struct HomePage: View {
             scanStatus: "scanning"
         )
         modelContext.insert(entry)
-        previousEntryCount = allEntries.count
 
         Task {
             await performScan(entry: entry, imageData: jpegData)

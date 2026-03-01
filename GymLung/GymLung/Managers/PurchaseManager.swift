@@ -20,7 +20,10 @@ class PurchaseManager {
     private init() {}
 
     static func configure() {
-        Purchases.configure(withAPIKey: "appl_qmJYEErUSnEcfgBYepUldFgLaZT")
+        debugPrint("[PurchaseManager] Configuring RevenueCat...")
+        Purchases.configure(withAPIKey: "appl_HZBQiWBmYTwaUvaABRSqOzFrDPs")
+        // RevenueCat test: test_IgPGBczixLststinGDKoPrjbNab
+        debugPrint("[PurchaseManager] Configuration complete.")
     }
 
     @MainActor
@@ -29,7 +32,7 @@ class PurchaseManager {
         do {
             offerings = try await Purchases.shared.offerings()
         } catch {
-            print("Error loading offerings: \(error)")
+            debugPrint("[PurchaseManager] Error loading offerings: \(error)")
         }
         isLoading = false
     }
@@ -38,9 +41,9 @@ class PurchaseManager {
     func checkEntitlement() async {
         do {
             let customerInfo = try await Purchases.shared.customerInfo()
-            isPro = customerInfo.entitlements["pro"]?.isActive == true
+            isPro = customerInfo.entitlements["GymLung Pro"]?.isActive == true
         } catch {
-            print("Error checking entitlement: \(error)")
+            debugPrint("[PurchaseManager] Error checking entitlement: \(error)")
         }
     }
 
@@ -48,10 +51,17 @@ class PurchaseManager {
     func purchase(_ package: Package) async -> Bool {
         do {
             let result = try await Purchases.shared.purchase(package: package)
-            isPro = result.customerInfo.entitlements["pro"]?.isActive == true
+            let entitlement = result.customerInfo.entitlements["GymLung Pro"]
+            isPro = entitlement?.isActive == true
+
+            // Schedule trial reminder notification if purchase started a trial
+            if isPro, entitlement?.periodType == .trial {
+                NotificationManager.scheduleTrialReminder()
+            }
+
             return isPro
         } catch {
-            print("Error purchasing: \(error)")
+            debugPrint("[PurchaseManager] Error purchasing: \(error)")
             return false
         }
     }
@@ -60,10 +70,10 @@ class PurchaseManager {
     func restorePurchases() async -> Bool {
         do {
             let customerInfo = try await Purchases.shared.restorePurchases()
-            isPro = customerInfo.entitlements["pro"]?.isActive == true
+            isPro = customerInfo.entitlements["GymLung Pro"]?.isActive == true
             return isPro
         } catch {
-            print("Error restoring: \(error)")
+            debugPrint("[PurchaseManager] Error restoring: \(error)")
             return false
         }
     }
@@ -84,21 +94,27 @@ class PurchaseManager {
         set { defaults.set(newValue, forKey: Self.scanDateKey) }
     }
 
+    static let dailyScanLimit = 3
+
     var canScan: Bool {
         if isPro { return true }
         resetIfNewDay()
-        return dailyScanCount < 2
+        return dailyScanCount < Self.dailyScanLimit
     }
 
     var remainingScans: Int {
         if isPro { return .max }
         resetIfNewDay()
-        return max(0, 2 - dailyScanCount)
+        return max(0, Self.dailyScanLimit - dailyScanCount)
     }
 
     func recordScan() {
         resetIfNewDay()
         dailyScanCount += 1
+    }
+
+    func resetDailyScans() {
+        dailyScanCount = 0
     }
 
     private func resetIfNewDay() {

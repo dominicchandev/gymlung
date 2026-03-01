@@ -196,7 +196,10 @@ struct OnboardingView: View {
                         )
                         .onAppear { requestReview() }
                     case .paywall:
-                        PaywallPage(onProceed: completeOnboarding)
+                        PaywallPage(
+                            trigger: .onboarding(goal: onboardingStates.goal, gender: onboardingStates.gender),
+                            onProceed: completeOnboarding
+                        )
                     }
                 }
                 .transition(.asymmetric(

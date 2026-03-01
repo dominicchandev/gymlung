@@ -35,6 +35,39 @@ class NotificationManager {
         UNUserNotificationCenter.current().removeAllPendingNotificationRequests()
     }
 
+    // MARK: - Trial Reminder
+
+    static func scheduleTrialReminder() {
+        let center = UNUserNotificationCenter.current()
+        center.removePendingNotificationRequests(withIdentifiers: ["trial_ending_reminder"])
+
+        let content = UNMutableNotificationContent()
+        content.title = "GymLung"
+        content.sound = .default
+
+        let regionRaw = UserDefaults.standard.string(forKey: "region") ?? Region.hk.rawValue
+        let region = Region(rawValue: regionRaw) ?? .hk
+
+        switch region {
+        case .hk:
+            content.body = "你嘅3日免費試用聽日就完㗎喇 唔cancel就要收錢啦"
+        case .tw:
+            content.body = "你的3天免費試用明天就到期了 不取消就要收費囉"
+        }
+
+        // Fire 48h from now (Day 2 of 3-day trial, ~24h before billing)
+        let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 48 * 60 * 60, repeats: false)
+        let request = UNNotificationRequest(identifier: "trial_ending_reminder", content: content, trigger: trigger)
+
+        center.add(request) { error in
+            if let error {
+                debugPrint("[NotificationManager] Failed to schedule trial reminder: \(error)")
+            } else {
+                debugPrint("[NotificationManager] Trial reminder scheduled for 48h from now")
+            }
+        }
+    }
+
     private func scheduleMeal(id: String, time: Date, center: UNUserNotificationCenter) {
         let content = UNMutableNotificationContent()
         content.sound = .default

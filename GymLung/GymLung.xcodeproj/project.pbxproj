@@ -31,6 +31,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		B6DCA1E32F5330CA00AD8A2F /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
 		B6FEE86A2F4F3F2000E04ED1 /* GymLung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymLung.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6FEE8792F4F3F2200E04ED1 /* GymLungTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymLungTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6FEE8832F4F3F2200E04ED1 /* GymLungUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GymLungUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -83,12 +84,21 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		B6DCA1E22F5330CA00AD8A2F /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				B6DCA1E32F5330CA00AD8A2F /* StoreKit.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		B6FEE8612F4F3F2000E04ED1 = {
 			isa = PBXGroup;
 			children = (
 				B6FEE86C2F4F3F2000E04ED1 /* GymLung */,
 				B6FEE87C2F4F3F2200E04ED1 /* GymLungTests */,
 				B6FEE8862F4F3F2200E04ED1 /* GymLungUITests */,
+				B6DCA1E22F5330CA00AD8A2F /* Frameworks */,
 				B6FEE86B2F4F3F2000E04ED1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -420,6 +430,8 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GymLung;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "GymLung 需要相機權限嚟影食物相，幫你分析營養資料";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -452,6 +464,8 @@
 				DEVELOPMENT_TEAM = Z52QA8N98T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = GymLung;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.healthcare-fitness";
 				INFOPLIST_KEY_NSCameraUsageDescription = "GymLung 需要相機權限嚟影食物相，幫你分析營養資料";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;

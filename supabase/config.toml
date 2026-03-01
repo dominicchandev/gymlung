@@ -383,7 +383,7 @@ s3_secret_key = "env(S3_SECRET_KEY)"
 
 [functions.scan-food]
 enabled = true
-verify_jwt = true
+verify_jwt = false
 import_map = "./functions/scan-food/deno.json"
 entrypoint = "./functions/scan-food/index.ts"
 

@@ -5,7 +5,7 @@
 //  Created by Chan Tin Lok on 26/2/2026.
 //
 
-import Foundation
+import SwiftUI
 
 enum ToneMode: String, CaseIterable {
     // HK modes
@@ -47,6 +47,17 @@ enum ToneMode: String, CaseIterable {
         case .twGanHua: return "🤡"
         case .twAma: return "👵"
         case .twYanShi: return "🌵"
+        }
+    }
+
+    var roastColor: Color {
+        switch self {
+        case .normal: return .orange
+        case .adult: return .red
+        case .gentle: return .pink
+        case .twGanHua: return .yellow
+        case .twAma: return .brown
+        case .twYanShi: return .green
         }
     }
 

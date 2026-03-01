@@ -144,7 +144,7 @@ struct ProgressPage: View {
                 WeightLogSheet()
             }
             .sheet(isPresented: $showPaywall) {
-                PaywallSheet()
+                PaywallSheet(trigger: .weightLog)
             }
             .onAppear { seedIfNeeded() }
         }

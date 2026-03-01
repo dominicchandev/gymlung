@@ -122,7 +122,7 @@ struct ToneSettingsSheet: View {
                 Text("粗口模式得18歲以上先用得")
             }
             .sheet(isPresented: $showPaywall) {
-                PaywallSheet()
+                PaywallSheet(trigger: .toneLock)
             }
         }
     }

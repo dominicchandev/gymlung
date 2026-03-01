@@ -1,0 +1,119 @@
+{
+  "appPolicies" : {
+    "eula" : "",
+    "policies" : [
+      {
+        "locale" : "en_US",
+        "policyText" : "",
+        "policyURL" : ""
+      }
+    ]
+  },
+  "identifier" : "930BB3B2",
+  "nonRenewingSubscriptions" : [
+
+  ],
+  "products" : [
+
+  ],
+  "settings" : {
+    "_applicationInternalID" : "6759828348",
+    "_askToBuyEnabled" : false,
+    "_billingGracePeriodEnabled" : false,
+    "_billingIssuesEnabled" : false,
+    "_developerTeamID" : "Z52QA8N98T",
+    "_disableDialogs" : false,
+    "_failTransactionsEnabled" : false,
+    "_lastSynchronizedDate" : 793983991.98702705,
+    "_locale" : "zh_Hant",
+    "_renewalBillingIssuesEnabled" : false,
+    "_storefront" : "HKG",
+    "_storeKitErrors" : [
+
+    ],
+    "_timeRate" : 0
+  },
+  "subscriptionGroups" : [
+    {
+      "id" : "21954425",
+      "localizations" : [
+
+      ],
+      "name" : "premium_group",
+      "subscriptions" : [
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "4.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6759828461",
+          "introductoryOffer" : {
+            "internalID" : "monthly_intro_3day",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D",
+            "displayPrice" : "0.00",
+            "numberOfPeriods" : 1
+          },
+          "localizations" : [
+            {
+              "description" : "AI食物辨識、詳細營養分析、自訂提醒，幫你每日管理飲食。隨時取消。",
+              "displayName" : "GymLung Pro 月費",
+              "locale" : "zh_Hant"
+            }
+          ],
+          "productID" : "gymlung.monthly_subscription.4_99",
+          "recurringSubscriptionPeriod" : "P1M",
+          "referenceName" : "Monthly, $4.99",
+          "subscriptionGroupID" : "21954425",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "29.99",
+          "familyShareable" : false,
+          "groupNumber" : 2,
+          "internalID" : "6759828699",
+          "introductoryOffer" : {
+            "internalID" : "yearly_intro_3day",
+            "paymentMode" : "free",
+            "subscriptionPeriod" : "P3D",
+            "displayPrice" : "0.00",
+            "numberOfPeriods" : 1
+          },
+          "localizations" : [
+            {
+              "description" : "AI食物辨識、詳細營養分析、自訂提醒，幫你每日管理飲食。年費更抵，等於每月慳超過40%。",
+              "displayName" : "GymLung Pro 年費",
+              "locale" : "zh_Hant"
+            }
+          ],
+          "productID" : "gymlung.yearly_subscription.29_99",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Yearly, $29.99",
+          "subscriptionGroupID" : "21954425",
+          "type" : "RecurringSubscription",
+          "winbackOffers" : [
+
+          ]
+        }
+      ]
+    }
+  ],
+  "version" : {
+    "major" : 4,
+    "minor" : 0
+  }
+}

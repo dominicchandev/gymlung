@@ -17,6 +17,7 @@ struct CameraView: View {
     @StateObject private var camera = CameraModel()
     @State private var scanLineOffset: CGFloat = 0
     @State private var viewSize: CGSize = .zero
+    @State private var hasCaptured = false
 
     var body: some View {
         ZStack {
@@ -217,6 +218,8 @@ struct CameraView: View {
         VStack(spacing: 16) {
             // Capture button
             Button {
+                guard !hasCaptured else { return }
+                hasCaptured = true
                 camera.capture()
             } label: {
                 ZStack {
@@ -224,10 +227,15 @@ struct CameraView: View {
                         .stroke(.white, lineWidth: 4)
                         .frame(width: 72, height: 72)
                     Circle()
-                        .fill(.white)
+                        .fill(hasCaptured ? .gray : .white)
                         .frame(width: 60, height: 60)
+                    if hasCaptured {
+                        ProgressView()
+                            .tint(.white)
+                    }
                 }
             }
+            .disabled(hasCaptured)
         }
         .padding(.bottom, 40)
     }

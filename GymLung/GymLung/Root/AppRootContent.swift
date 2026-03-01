@@ -41,6 +41,12 @@ struct AppRootContent: View {
                     .transition(.opacity)
                     .zIndex(1)
             }
+
+            #if DEBUG
+            DevPanelButton()
+                .ignoresSafeArea()
+                .zIndex(2)
+            #endif
         }
         .task {
             await authManager.initialize()

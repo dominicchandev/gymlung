@@ -476,16 +476,35 @@ enum AppStrings {
     // MARK: - Paywall Page
 
     struct Paywall {
-        static func title(_ r: Region) -> String {
-            switch r {
-            case .hk: return "想瘦？升級啦"
-            case .tw: return "想瘦？升級吧"
+        static func title(for trigger: PaywallTrigger, _ r: Region) -> String {
+            switch trigger {
+            case .onboarding(let goal, _):
+                if goal == "增肌" {
+                    return r == .hk ? "想大隻？升級啦" : "想變壯？升級吧"
+                }
+                return r == .hk ? "想瘦？升級啦" : "想瘦？升級吧"
+            case .scanLimit(let gender):
+                if r == .tw { return "長大了吧" }
+                return gender == "女" ? "大個女啦" : "大個仔啦"
+            case .toneLock:
+                return r == .hk ? "想聽更多嘢？" : "想聽更多？"
+            case .weightLog:
+                return r == .hk ? "想知自己進步幾多？" : "想知道自己進步多少？"
             }
         }
-        static func subtitle(_ r: Region) -> String {
-            switch r {
-            case .hk: return "免費版夠你用 但你瘦唔到唔好怪我"
-            case .tw: return "免費版能用 但你瘦不下來不要怪我"
+        static func subtitle(for trigger: PaywallTrigger, _ r: Region) -> String {
+            switch trigger {
+            case .onboarding(let goal, _):
+                if goal == "增肌" {
+                    return r == .hk ? "增肌要食啱嘢 唔track點知食夠未" : "增肌要吃對東西 不追蹤怎麼知道夠不夠"
+                }
+                return r == .hk ? "免費版夠你用 但你瘦唔到唔好怪我" : "免費版能用 但你瘦不下來不要怪我"
+            case .scanLimit:
+                return r == .hk ? "自己嘅AI Tokens自己俾啦" : "自己的AI Tokens自己付吧"
+            case .toneLock:
+                return r == .hk ? "升級解鎖全部語氣 想點串就點串" : "升級解鎖所有語氣 想怎麼嘴就怎麼嘴"
+            case .weightLog:
+                return r == .hk ? "升級先可以記錄體重 睇晒你嘅進度" : "升級才能記錄體重 追蹤你的所有進度"
             }
         }
         static func feature1(_ r: Region) -> String {
@@ -550,6 +569,73 @@ enum AppStrings {
         }
         static func restore(_ r: Region) -> String {
             return "恢復購買"
+        }
+
+        // MARK: - Trial-Aware Strings
+
+        static func ctaTrial(_ r: Region) -> String {
+            switch r {
+            case .hk: return "免費試3日"
+            case .tw: return "免費試用3天"
+            }
+        }
+
+        static func subtitleTrial(for trigger: PaywallTrigger, _ r: Region) -> String {
+            switch trigger {
+            case .scanLimit:
+                return r == .hk ? "自己嘅AI Tokens自己俾啦" : "自己的AI Tokens自己付吧"
+            default:
+                return r == .hk ? "3日免費試用 唔啱就cancel 唔收你錢" : "3天免費試用 不喜歡就取消 不收你錢"
+            }
+        }
+
+        static func trialBadge(_ r: Region) -> String {
+            switch r {
+            case .hk: return "免費試3日"
+            case .tw: return "免費試3天"
+            }
+        }
+
+        static func annualPriceWithTrial(_ price: String, _ r: Region) -> String {
+            switch r {
+            case .hk: return "3日免費 之後 \(price)/年"
+            case .tw: return "3天免費 之後 \(price)/年"
+            }
+        }
+
+        static func monthlyPriceWithTrial(_ price: String, _ r: Region) -> String {
+            switch r {
+            case .hk: return "3日免費 之後 \(price)/月"
+            case .tw: return "3天免費 之後 \(price)/月"
+            }
+        }
+
+        static func timelineToday(_ r: Region) -> String {
+            switch r {
+            case .hk: return "即刻解鎖全部功能"
+            case .tw: return "立刻解鎖所有功能"
+            }
+        }
+
+        static func timelineReminder(_ r: Region) -> String {
+            switch r {
+            case .hk: return "我哋會提你"
+            case .tw: return "我們會提醒你"
+            }
+        }
+
+        static func timelineBilling(_ r: Region) -> String {
+            switch r {
+            case .hk: return "開始收費 隨時cancel"
+            case .tw: return "開始收費 隨時取消"
+            }
+        }
+
+        static func trialDisclosure(_ r: Region) -> String {
+            switch r {
+            case .hk: return "免費試用期後將自動續訂。可隨時喺設定中取消訂閱。"
+            case .tw: return "免費試用結束後將自動續訂。可隨時在設定中取消訂閱。"
+            }
         }
     }
 
